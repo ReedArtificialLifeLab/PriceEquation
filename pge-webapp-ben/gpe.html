@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <title>GPE App</title>
+
+  <script type="text/javascript" src="dist/vis.js"></script>
+  <link href="dist/vis.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="network.js"></script>
+
+  <link type="text/css"  rel="stylesheet" href="network.css"></style>
+</head>
+
+
+
+<body onload="draw();">
+  <h2>GPE App</h2>
+
+  <div class="sidebar">
+
+    <form onsubmit="draw(); return false;">
+      <label for="wnodeCount1">Number of White Ancestor Nodes:</label>
+      <input id="wnodeCount1" type="text" value="2" style="width: 50px;">
+        <input type="submit" value="Go">
+    </form>
+
+    <form onsubmit="draw(); return false;">
+      <label for="bnodeCount1">Number of Black Ancestor Nodes:</label>
+      <input id="bnodeCount1" type="text" value="2" style="width: 50px;">
+        <input type="submit" value="Go">
+    </form>
+
+    <form onsubmit="draw(); return false;">
+      <label for="wnodeCount2">Number of White Descendant Nodes:</label>
+      <input id="wnodeCount2" type="text" value="5" style="width: 50px;">
+        <input type="submit" value="Go">
+    </form>
+
+    <form onsubmit="draw(); return false;">
+      <label for="bnodeCount2">Number of Black Descendant Nodes:</label>
+      <input id="bnodeCount2" type="text" value="5" style="width: 50px;">
+      <input type="submit" value="Go">
+    </form>
+
+    <form onsubmit="draw(); return false;">
+      <label for="wparentCount">Number of Parent Nodes per White Descendant:</label>
+      <input id="wparentCount" type="text" value="1" style="width: 50px;">
+      <input type="submit" value="Go">
+    </form>
+
+    <form onsubmit="draw(); return false;">
+      <label for="bparentCount">Number of Parent Nodes per Black Descendant:</label>
+      <input id="bparentCount" type="text" value="1" style="width: 50px;">
+      <input type="submit" value="Go">
+    </form>
+
+    <p><img src="img/1stterm.gif"><span>  </span><span id="1stTerm"></span></p>
+    <p><img src="img/2ndterm.gif"><span>  </span><span id="2ndTerm"></span></p>
+    <p><img src="img/3rdterm.gif"><span>  </span><span id="3rdTerm"></span></p>
+    <p><img src="img/deltaXbar.gif"><span>  </span><span id="deltaXbar"></span></p>
+    <p><img src="img/xbard.gif"><span>  </span><span id="xbard"></span></p>
+    <p><img src="img/xbara.gif"><span>  </span><span id="xbara"></span></p>
+
+    <form onsubmit="fit(); return false;">
+      <input id="fitButton" type="submit" value="Fit">
+    </form>
+
+  </div>
+  <div id="mynetwork"></div>
+
+</body>
+</html>
