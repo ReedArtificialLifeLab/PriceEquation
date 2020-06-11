@@ -1,10 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+  <body>
+    <h1>PGE WebApp (Henry)</h1>
+
+    <hr>
+
+    <!-- <input type="file" id="input-graph-json" value="">
+    <br>
+    <input type="button" id="submit-graph-json" value="submit" onclick="load_input_json()"> -->
+
+    <div id="config-container">
+      <h2>Genealogy Configuration</h2>
+      <table>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td>Initial Distribution</td>
+          <td>
+            <table>
+              <tr><td>Red: <input type="number" id="input-initial-distribution-trait0" value="5"></td></tr>
+              <tr><td>Blue: <input type="number" id="input-initial-distribution-trait1" value="5"></td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>Fitnesses</td>
+          <td>
+            <table>
+              <tr><td>Red: <input type="number" id="input-fitness-trait0" value="1"></td></tr>
+              <tr><td>Blue: <input type="number" id="input-fitness-trait1" value="1"></td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>Parentality</td>
+          <td><input type="number" id="input-parentality" value="2"></td>
+        </tr>
+        <tr>
+          <td>Generations</td>
+          <td><input type="number" id="input-generations" value="5"></td>
+        </tr>
+        <tr>
+          <td>Edge Physics</td>
+          <td><input type="checkbox" id="input-edge-physics" value=""></td>
+        </tr>
+      </table>
+      <br>
+      <button type="button" id="button-generate-genalogy" onclick="generate_genealogy()">generate genealogy</button>
+    </div>
+    <div id="graph-container"></div>
+  </body>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>PGE WebApp (Henry)</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/graph.css">
+    <script type="text/javascript" src="scripts/d3.min.js"></script>
+    <script type="text/javascript" src="scripts/graph.js"></script>
+    <script type="text/javascript" src="scripts/genealogy.js"></script>
+    <script type="text/javascript" src="scripts/main.js"></script>
   </head>
-  <body>
-
-  </body>
 </html>
