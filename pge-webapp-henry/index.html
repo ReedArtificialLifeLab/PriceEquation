@@ -50,16 +50,52 @@
       <br>
       <button type="button" id="button-generate-genalogy" onclick="generate_genealogy()">generate genealogy</button>
     </div>
+    <!--  -->
     <div id="graph-container"></div>
+    <!--  -->
+    <div id="gpe-result-container">
+      <table>
+        <tr>
+          <th>Measure</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td>cov over ancestors</td>
+          <td><span id="output-cov-ancestors"></span></td>
+        </tr>
+        <tr>
+          <td>ave DX</td>
+          <td><span id="output-ave-Dx"></span></td>
+        </tr>
+        <tr>
+          <td>cov over descendants</td>
+          <td><span id="output-cov-descendants"></span></td>
+        </tr>
+        <tr>
+          <td>DXbar</td>
+          <td><span id="output-DXBar"></span></td>
+        </tr>
+        <tr>
+          <td>Xbar ancestors</td>
+          <td><span id="output-Xbar-ancestors"></span></td>
+        </tr>
+        <tr>
+          <td>Xbar descendants</td>
+          <td><span id="output-Xbar-descendants"></span></td>
+        </tr>
+      </table>
+    </div>
   </body>
   <head>
     <meta charset="utf-8">
     <title>PGE WebApp (Henry)</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/graph.css">
+    <link rel="stylesheet" href="styles/gpe-result.css">
     <script type="text/javascript" src="scripts/d3.min.js"></script>
     <script type="text/javascript" src="scripts/graph.js"></script>
     <script type="text/javascript" src="scripts/genealogy.js"></script>
+    <script type="text/javascript" src="scripts/gpe.js"></script>
     <script type="text/javascript" src="scripts/main.js"></script>
   </head>
 </html>

@@ -90,6 +90,14 @@ class Graph {
     return this.nodes.toArray();
   }
 
+  get_children_ids(parent_id) {
+    return this.get_edges_from(parent_id).map((edge) => edge.target);
+  }
+
+  get_parents_ids(child_id) {
+    return this.get_edges_to(child_id).map((edge) => edge.source);
+  }
+
   add_edge(source_id, target_id, metadata) {
     let edge_id = this.edges.add({source: source_id, target: target_id, metadata: metadata});
     this.edges_from.append_at(source_id, edge_id);
@@ -118,9 +126,17 @@ class Graph {
     return this.edges.toArray();
   }
 
-  set_level(node_id, level_id) {
-    this.levels.append_at(level_id, node_id);
-    this.get_node(node_id).level = level_id;
+  exists_edge(parent_id, child_id) {
+    if (this.get_edges_from_to(parent_id, child_id).lenght > 0) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  set_level(node_id, level) {
+    this.levels.append_at(level, node_id);
+    this.get_node(node_id).level = level;
   }
 
   get_level(node_id) {
@@ -129,6 +145,10 @@ class Graph {
 
   get_level_array() {
     return this.levels.toArray();
+  }
+
+  get_level_node_ids(level) {
+    return this.levels.get(level);
   }
 }
 
@@ -158,10 +178,10 @@ function graph_from_json(json) {
   });
 
   // levels
-  json.levels.forEach((level_nodes, level_id) => {
+  json.levels.forEach((level_nodes, level) => {
     level_nodes.forEach((node_id_old) => {
       let node_id_new = node_ids_new[node_id_old];
-      graph.set_level(node_id_new, level_id);
+      graph.set_level(node_id_new, level);
     });
   });
 
