@@ -7,17 +7,31 @@ class Dynamic_Table {
     this.element = null;
 
     this.column_keys = [];
+    this.column_headers = [];
     // list of data list,
     // where each data list has an entry for each column key
     this.rows = [];
   }
 
-  add_column_key(column_key) {
+  get_row(row_index) {
+    return this.rows[row_index];
+  }
+
+  add_column(column_header, column_key) {
+    this.column_headers.push(column_header);
     this.column_keys.push(column_key);
   }
 
+  // add_column_key(column_key) {
+  //   this.column_keys.push(column_key);
+  // }
+
   add_row(row_data) {
     this.rows.push(row_data);
+  }
+
+  get_entry(column_key, row_index) {
+    return this.rows[row_index][this.column_keys.indexOf(column_key)];
   }
 
   set_entry(column_key, row_index, entry) {
@@ -40,11 +54,10 @@ class Dynamic_Table {
     // header row
     let header_row = document.createElement("tr");
     this.element.appendChild(header_row);
-    this.column_keys.forEach((column_key) => {
+    this.column_headers.forEach((column_header) => {
       let header_cell = document.createElement("th");
       header_row.appendChild(header_cell);
-      header_cell.innerText = column_key;
-      console.log(column_key);
+      header_cell.innerText = column_header;
     });
 
     // data rows

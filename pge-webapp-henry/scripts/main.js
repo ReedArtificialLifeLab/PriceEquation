@@ -84,11 +84,14 @@ function load_genealogy_config() {
 //
 
 gpe_config_inputs = {
-  measure_trait: null
+  measure_trait: null,
+  precision: null
 };
 
 function generate_gpe_config_inputs() {
   if (gpe_config_inputs.measure_trait !== null) {
+    // TODO: actually need to check for dynamic update of traits if there are other possibilities, but for now just 2 statically
+    return
     gpe_config_inputs.measure_trait.remove();
   }
   let container = document.getElementById("input-measure-trait-container");
@@ -141,13 +144,13 @@ function generate_genealogy() {
 
 // initialize gpe result table
 gpe_result_table = new Dynamic_Table(document.getElementById("gpe-result-container"));
-gpe_result_table.add_column_key("gen")
-gpe_result_table.add_column_key("covt_a");
-gpe_result_table.add_column_key("ave(DX)");
-gpe_result_table.add_column_key("covt_d");
-gpe_result_table.add_column_key("Xbar_a");
-gpe_result_table.add_column_key("Xbar_d");
-gpe_result_table.add_column_key("DXbar");
+gpe_result_table.add_column("gen", "generation")
+gpe_result_table.add_column("covt_a", "covt_ancestors");
+gpe_result_table.add_column("ave(DX)", "ave_DX");
+gpe_result_table.add_column("covt_d", "covt_descendants");
+gpe_result_table.add_column("Xbar_a", "Xbar_ancestors");
+gpe_result_table.add_column("Xbar_d", "Xbar_descendants");
+gpe_result_table.add_column("DXbar", "DXbar");
 
 function parse_gpe_result(x) {
   return Math.round(parseFloat(x) * gpe_config.precision) / gpe_config.precision;
@@ -192,6 +195,7 @@ function calculate_gpe_result(ancestor_level) {
   };
 
   update_gpe_result_outputs();
+  update_gpe_graph();
 }
 
 //
