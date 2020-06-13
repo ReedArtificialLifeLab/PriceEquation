@@ -77,7 +77,6 @@ function create_simple_genealogy(initial_distribution, fitness, parents_count, g
       }
     }
 
-    console.log(selected_indices.map((index) => indices_to_data[index]));
     return selected_indices.map((index) => indices_to_data[index]);
   }
 

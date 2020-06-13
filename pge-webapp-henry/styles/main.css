@@ -8,7 +8,6 @@ html, body {
 
 #config-container {
   vertical-align: top;
-  /* width: 400px; */
   display: inline-block;
 }
 
@@ -22,6 +21,11 @@ html, body {
 }
 
 #gpe-result-container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#gpe-graph-container {
   display: inline-block;
   vertical-align: top;
 }
@@ -71,5 +75,4 @@ input[type="number"] {
 
 .output {
   display: inline-block;
-  min-width: 100px;
 }

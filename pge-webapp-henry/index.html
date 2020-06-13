@@ -10,14 +10,14 @@
     <input type="button" id="submit-graph-json" value="submit" onclick="load_input_json()"> -->
 
     <div id="config-container">
-      <h2>Genealogy Configuration</h2>
+      <h2>Configuration</h2>
       <table>
         <tr>
           <th>Parameter</th>
           <th>Value</th>
         </tr>
         <tr>
-          <td>Initial Distribution</td>
+          <td>Initial<br>Distribution</td>
           <td>
             <table>
               <tr><td>Red: <input type="number" id="input-initial-distribution-trait0" value="4"></td></tr>
@@ -46,6 +46,10 @@
           <td>Edge Physics</td>
           <td><input type="checkbox" id="input-edge-physics"></td>
         </tr>
+        <tr>
+          <td>Measure Trait</td>
+          <td id="input-measure-trait-container"></td>
+        </tr>
         <!-- <tr>
           <td>...</td>
           <td><input type="checkbox" id="input-..." value="_"></td>
@@ -61,41 +65,10 @@
     </div>
     <!--  -->
     <div id="gpe-result-container">
-      <h2>Genealogy GPE Results</h2>
-      <table>
-        <tr>
-          <th>Measure</th>
-          <th>Value</th>
-        </tr>
-        <tr>
-          <td>Measure Trait</td>
-          <td id="input-measure-trait-container"></td>
-        </tr>
-        <tr>
-          <td>covt over ancestors</td>
-          <td><span class="output" id="output-cov-ancestors"></span></td>
-        </tr>
-        <tr>
-          <td>ave DX</td>
-          <td><span class="output" id="output-ave-Dx"></span></td>
-        </tr>
-        <tr>
-          <td>covt over descendants</td>
-          <td><span class="output" id="output-cov-descendants"></span></td>
-        </tr>
-        <tr>
-          <td>DXbar</td>
-          <td><span class="output" id="output-DXbar"></span></td>
-        </tr>
-        <tr>
-          <td>Xbar ancestors</td>
-          <td><span class="output" id="output-Xbar-ancestors"></span></td>
-        </tr>
-        <tr>
-          <td>Xbar descendants</td>
-          <td><span class="output" id="output-Xbar-descendants"></span></td>
-        </tr>
-      </table>
+      <h2>GPE Results</h2>
+    </div>
+    <div id="gpe-graph-container">
+      <h2>GPE Graph</h2>
     </div>
   </body>
   <head>
@@ -104,6 +77,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/graph.css">
     <script type="text/javascript" src="scripts/d3.min.js"></script>
+    <script type="text/javascript" src="scripts/dynamic_table.js"></script>
     <script type="text/javascript" src="scripts/graph.js"></script>
     <script type="text/javascript" src="scripts/genealogy.js"></script>
     <script type="text/javascript" src="scripts/gpe.js"></script>

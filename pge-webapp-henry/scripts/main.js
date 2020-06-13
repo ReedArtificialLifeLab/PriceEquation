@@ -24,23 +24,22 @@
 // global variables
 //
 
-// config
+// genealogy
+
 var genealogy_config_inputs = null;
 var genealogy_config = {};
 
-// result
-var gpe_result_outputs = null;
-
-// genealoy
 var genealogy = null;
 
-// gpe analysis
 var gpe_config_inputs = null;
+var gpe_config = {};
+
+// gpe analysis
+
 var gpe_result = {};
-var gpe_result_precision = 100000;
+var gpe_result_table = null;
+
 var gpe_analysis = null;
-var gpe_trait = 0;
-var gpe_ancestor_level = 0;
 
 //
 // genealogy config
@@ -107,12 +106,17 @@ function generate_gpe_config_inputs() {
 generate_gpe_config_inputs();
 
 function load_gpe_config() {
-  gpe_trait = parseInt(gpe_config_inputs.measure_trait.value);
+  gpe_config = {
+    trait: parseInt(gpe_config_inputs.measure_trait.value),
+    precision: 100000
+  };
 }
 
 function load_configs() {
   load_genealogy_config();
   load_gpe_config();
+
+  generate_gpe_config_inputs();
 }
 
 //
@@ -132,32 +136,51 @@ function generate_genealogy() {
 }
 
 //
-// outputs
+// gpe results
 //
 
-gpe_result_outputs = {
-  covt_ancestors: document.getElementById("output-cov-ancestors"),
-  ave_DX: document.getElementById("output-ave-Dx"),
-  covt_descendants: document.getElementById("output-cov-descendants"),
-  DXbar: document.getElementById("output-DXbar"),
-  Xbar_ancestors: document.getElementById("output-Xbar-ancestors"),
-  Xbar_descendants: document.getElementById("output-Xbar-descendants")
-};
+// initialize gpe result table
+gpe_result_table = new Dynamic_Table(document.getElementById("gpe-result-container"));
+gpe_result_table.add_column_key("gen")
+gpe_result_table.add_column_key("covt_a");
+gpe_result_table.add_column_key("ave(DX)");
+gpe_result_table.add_column_key("covt_d");
+gpe_result_table.add_column_key("Xbar_a");
+gpe_result_table.add_column_key("Xbar_d");
+gpe_result_table.add_column_key("DXbar");
+
+function parse_gpe_result(x) {
+  return Math.round(parseFloat(x) * gpe_config.precision) / gpe_config.precision;
+}
 
 function update_gpe_result_outputs() {
-  for (var key in gpe_result) {
-    let x = gpe_result[key].toString();
-    x = Math.round(x*gpe_result_precision)/gpe_result_precision;
-    gpe_result_outputs[key].innerText = x.toString();
+  gpe_result_table.clear_rows();
+
+  for(var ancestor_level = 0;
+      ancestor_level < genealogy_config.generations_count - 1;
+      ancestor_level++)
+  {
+    let gpe_analysis = new GPE_Analysis(genealogy, gpe_config.trait, ancestor_level);
+    gpe_result_table.add_row([
+      ancestor_level+"→"+(ancestor_level+1),
+      parse_gpe_result(gpe_analysis.covt_ancestors()),
+      parse_gpe_result(gpe_analysis.ave_DX()),
+      parse_gpe_result(gpe_analysis.covt_descendants()),
+      parse_gpe_result(gpe_analysis.Xbar_ancestors()),
+      parse_gpe_result(gpe_analysis.Xbar_descendants()),
+      parse_gpe_result(gpe_analysis.DXbar_simple())
+    ]);
   }
+
+  gpe_result_table.update_html();
 }
 
 //
 // gpe analysis
 //
 
-function calculate_gpe_result() {
-  gpe_analysis = new GPE_Analysis(genealogy, gpe_trait, gpe_ancestor_level);
+function calculate_gpe_result(ancestor_level) {
+  gpe_analysis = new GPE_Analysis(genealogy, gpe_config.trait, ancestor_level);
 
   gpe_result = {
     covt_ancestors: gpe_analysis.covt_ancestors(),
@@ -167,13 +190,6 @@ function calculate_gpe_result() {
     Xbar_ancestors: gpe_analysis.Xbar_ancestors(),
     Xbar_descendants: gpe_analysis.Xbar_descendants()
   };
-
-  // console.log(gpe_analysis.covt_ancestors());
-  // console.log(gpe_analysis.ave_DX());
-  // console.log(gpe_analysis.covt_descendants());
-  // console.log(gpe_analysis.DXbar_simple());
-  // console.log(gpe_analysis.Xbar_ancestors());
-  // console.log(gpe_analysis.Xbar_descendants());
 
   update_gpe_result_outputs();
 }

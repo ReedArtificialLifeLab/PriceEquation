@@ -24,6 +24,10 @@ class Dynamic_Table {
     this.rows[row_index][this.column_keys.indexOf(column_key)] = entry;
   }
 
+  clear_rows() {
+    this.rows = [];
+  }
+
   update_html() {
     if (this.element !== null) {
       this.element.remove();
@@ -40,6 +44,7 @@ class Dynamic_Table {
       let header_cell = document.createElement("th");
       header_row.appendChild(header_cell);
       header_cell.innerText = column_key;
+      console.log(column_key);
     });
 
     // data rows
