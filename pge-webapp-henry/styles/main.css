@@ -12,9 +12,22 @@ html, body {
   display: inline-block;
 }
 
+#genealogy-graph-container {
+  display: inline-block;
+}
+
 #graph-container {
   display: inline-block;
   border: 1px solid black;
+}
+
+#gpe-result-container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+h2 {
+  text-align: center;
 }
 
 table {
@@ -34,11 +47,17 @@ td {
   padding: 5px;
 }
 
+input {
+  font-family: menlo;
+  font-size: 12pt;
+}
+
 input[type="number"] {
   width: 50px;
 }
 
-button {
+#button-generate-genealogy {
+  margin: auto;
   background: black;
   color: white;
   border: none;
@@ -47,6 +66,10 @@ button {
   text-decoration: none;
   display: block;
   font-size: 16pt;
-  margin: 0;
   font-family: menlo;
+}
+
+.output {
+  display: inline-block;
+  min-width: 100px;
 }

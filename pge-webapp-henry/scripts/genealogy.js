@@ -1,3 +1,5 @@
+// TODO: make these more modular
+
 function color_from_trait(trait) {
   if (trait == "0") { return "red"; } else
   if (trait == "1") { return "blue"; }
@@ -29,7 +31,7 @@ function create_simple_genealogy(initial_distribution, fitness, parents_count, g
   function calculate_parent_weighted_ids(parent_ids) {
     let weighted_ids = {};
     let fitness_total = 0;
-    parent_ids.forEach((node_id, i) => {
+    parent_ids.forEach((node_id) => {
       let trait = graph.get_node(node_id).trait;
       let trait_fitness = fitness(trait);
       weighted_ids[node_id] = trait_fitness;
@@ -55,25 +57,33 @@ function create_simple_genealogy(initial_distribution, fitness, parents_count, g
   }
 
   function selected_multiple_weighted(weighted_data, n, replacement=true) {
-    if (!replacement) {
-      weighted_data = JSON.parse(JSON.stringify(weighted_data));
+    let weighted_indices = {};
+    let indices_to_data = {};
+    let index_count = 0;
+    for (var key in weighted_data) {
+      weighted_indices[index_count] = weighted_data[key];
+      indices_to_data[index_count] = key;
+      index_count++;
     }
+
     max = 1.0;
-    selections = [];
+    selected_indices = [];
     for (var i = 0; i < n; i++) {
-      let key = select_weighted(weighted_data, max=max);
-      selections.push(key);
+      let index = select_weighted(weighted_indices, max=max);
+      selected_indices.push(index);
       if (!replacement) {
-        max -= weighted_data[key];
-        delete weighted_data[key];
+        max -= weighted_indices[index];
+        delete weighted_indices[index];
       }
     }
-    return selections;
+
+    console.log(selected_indices.map((index) => indices_to_data[index]));
+    return selected_indices.map((index) => indices_to_data[index]);
   }
 
   function polysex(parent_ids) {
     let weighted_traits = new DefaultDictionary(() => 0);
-    parent_ids.forEach((parent_id, i) => {
+    parent_ids.forEach((parent_id) => {
       let parent_trait = graph.get_node(parent_id).trait;
       weighted_traits.modify(parent_trait, (x) => x + 1/parent_ids.length);
     });
@@ -91,15 +101,20 @@ function create_simple_genealogy(initial_distribution, fitness, parents_count, g
       graph.set_level(child_id, generation_index);
 
       // select parents for child
-      let parent_ids = selected_multiple_weighted(ancestor_weighted_ids, parents_count, replacement=false);
+      let parent_ids =
+        selected_multiple_weighted(
+          ancestor_weighted_ids,
+          parents_count,
+          replacement=false)
+        .map((parent_id) => parseInt(parent_id));
       // parents generates trait for child
       graph.get_node(child_id)["trait"] = polysex(parent_ids);
       let color = color_from_trait(graph.get_node(child_id)["trait"]);
       graph.get_node(child_id)["fill"] = color;
 
       // link parents to child
-      parent_ids.forEach((parent_id, i) => {
-        graph.add_edge(parent_id, child_id, {stroke: color});
+      parent_ids.forEach((parent_id) => {
+        graph.add_edge(parent_id, child_id, {stroke: color})
       });
     }
     // choose from all ancestors
@@ -107,7 +122,6 @@ function create_simple_genealogy(initial_distribution, fitness, parents_count, g
     // choose only from immediately previous generation
     ancestor_ids = child_ids;
   }
-
 
   return graph;
 }

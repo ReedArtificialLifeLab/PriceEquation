@@ -20,9 +20,33 @@
 //   }
 // }
 
-// genealogy_config.
+//
+// global variables
+//
 
-var genealogy_config_inputs = {
+// config
+var genealogy_config_inputs = null;
+var genealogy_config = {};
+
+// result
+var gpe_result_outputs = null;
+
+// genealoy
+var genealogy = null;
+
+// gpe analysis
+var gpe_config_inputs = null;
+var gpe_result = {};
+var gpe_result_precision = 100000;
+var gpe_analysis = null;
+var gpe_trait = 0;
+var gpe_ancestor_level = 0;
+
+//
+// genealogy config
+//
+
+genealogy_config_inputs = {
   initial_distribution_trait0: document.getElementById("input-initial-distribution-trait0"),
   initial_distribution_trait1: document.getElementById("input-initial-distribution-trait1"),
   fitness_trait0: document.getElementById("input-fitness-trait0"),
@@ -30,9 +54,7 @@ var genealogy_config_inputs = {
   parentality: document.getElementById("input-parentality"),
   generations: document.getElementById("input-generations"),
   edge_physics: document.getElementById("input-edge-physics")
-}
-
-var genealogy_config = {};
+};
 
 function load_genealogy_config() {
   genealogy_config.initial_distribution = [
@@ -58,12 +80,47 @@ function load_genealogy_config() {
   }
 }
 
-// graph
+//
+// gpe config
+//
 
-var genealogy = null;
+gpe_config_inputs = {
+  measure_trait: null
+};
+
+function generate_gpe_config_inputs() {
+  if (gpe_config_inputs.measure_trait !== null) {
+    gpe_config_inputs.measure_trait.remove();
+  }
+  let container = document.getElementById("input-measure-trait-container");
+  let measure_trait = document.createElement("select");
+  container.appendChild(measure_trait);
+  gpe_config_inputs.measure_trait = measure_trait;
+  traits = [0, 1];
+  traits.forEach((trait) => {
+    let option = document.createElement("option");
+    option.value = trait;
+    option.innerText = color_from_trait(trait);
+    measure_trait.appendChild(option);
+  });
+}
+generate_gpe_config_inputs();
+
+function load_gpe_config() {
+  gpe_trait = parseInt(gpe_config_inputs.measure_trait.value);
+}
+
+function load_configs() {
+  load_genealogy_config();
+  load_gpe_config();
+}
+
+//
+// graph
+//
 
 function generate_genealogy() {
-  load_genealogy_config();
+  load_configs();
   genealogy = create_simple_genealogy(
     genealogy_config.initial_distribution,
     genealogy_config.fitness,
@@ -71,47 +128,58 @@ function generate_genealogy() {
     genealogy_config.generations_count
   );
   simulate_graph(genealogy, 600, 600, "#graph-container", link_strength=genealogy_config.link_strength);
+  calculate_gpe_result();
 }
-
-generate_genealogy();
-
 
 //
 // outputs
 //
 
-var gpe_result_outputs = {
-  cov_ancestors: document.getElementById("output-cov-ancestors"),
-  ave_Dx: document.getElementById("output-ave-Dx"),
-  cov_descendants: document.getElementById("output-cov-descendants"),
+gpe_result_outputs = {
+  covt_ancestors: document.getElementById("output-cov-ancestors"),
+  ave_DX: document.getElementById("output-ave-Dx"),
+  covt_descendants: document.getElementById("output-cov-descendants"),
   DXbar: document.getElementById("output-DXbar"),
   Xbar_ancestors: document.getElementById("output-Xbar-ancestors"),
   Xbar_descendants: document.getElementById("output-Xbar-descendants")
 };
 
-var gpe_result = {};
-
 function update_gpe_result_outputs() {
   for (var key in gpe_result) {
-    gpe_result_outputs[key].innerText = gpe_result[key].toString();
+    let x = gpe_result[key].toString();
+    x = Math.round(x*gpe_result_precision)/gpe_result_precision;
+    gpe_result_outputs[key].innerText = x.toString();
   }
 }
 
-var gpe_analysis = null;
+//
+// gpe analysis
+//
 
-var gpe_trait = 1;
-var gpe_ancestor_level;
-
-function calculate_results() {
+function calculate_gpe_result() {
   gpe_analysis = new GPE_Analysis(genealogy, gpe_trait, gpe_ancestor_level);
+
   gpe_result = {
-    cov_ancestors: gpe_analysis.cov_ancestors(),
-    ave_Dx: gpe_analysis.ave_Dx(),
-    cov_descendants: gpe_analysis.cov_descendants(),
+    covt_ancestors: gpe_analysis.covt_ancestors(),
+    ave_DX: gpe_analysis.ave_DX(),
+    covt_descendants: gpe_analysis.covt_descendants(),
     DXbar: gpe_analysis.DXbar_simple(),
     Xbar_ancestors: gpe_analysis.Xbar_ancestors(),
     Xbar_descendants: gpe_analysis.Xbar_descendants()
   };
-  console.log(gpe_result);
+
+  // console.log(gpe_analysis.covt_ancestors());
+  // console.log(gpe_analysis.ave_DX());
+  // console.log(gpe_analysis.covt_descendants());
+  // console.log(gpe_analysis.DXbar_simple());
+  // console.log(gpe_analysis.Xbar_ancestors());
+  // console.log(gpe_analysis.Xbar_descendants());
+
   update_gpe_result_outputs();
 }
+
+//
+// run
+//
+
+generate_genealogy();

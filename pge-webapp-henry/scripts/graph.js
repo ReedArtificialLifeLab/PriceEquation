@@ -111,15 +111,19 @@ class Graph {
   }
 
   get_edges_from(source_id) {
-    return this.edges_from.get(source_id);
+    return this.edges_from.get(source_id)
+      .map((edge_id) => this.get_edge(edge_id));
   }
 
   get_edges_to(target_id) {
-    return this.edges_to.get(target_id);
+    return this.edges_to.get(target_id)
+      .map((edge_id) => this.get_edge(edge_id));
   }
 
   get_edges_from_to(source_id, target_id) {
-    return this.edges_from_to.get(source_id.toString()+":"+target_id.toString());
+    return this.edges_from_to
+      .get(source_id.toString()+":"+target_id.toString())
+      .map((edge_id) => this.get_edge(edge_id));
   }
 
   get_edge_array() {
@@ -191,10 +195,12 @@ function graph_from_json(json) {
 var svg = null;
 
 function simulate_graph(graph, width, height, container_selector, link_strength=1) {
-  var nodes = graph.get_node_array();
-  var edges = graph.get_edge_array();
+  let nodes = graph.get_node_array()
+                .map((node) => JSON.parse(JSON.stringify(node)));
+  let edges = graph.get_edge_array()
+                .map((edge) => JSON.parse(JSON.stringify(edge)));
 
-  var level_ys = {};
+  let level_ys = {};
   let levels_size = graph.get_level_array().length;
   for (var i = 0; i < levels_size; i++) {
     level_ys[i] = height*(i+1)/(levels_size+1);
@@ -207,7 +213,7 @@ function simulate_graph(graph, width, height, container_selector, link_strength=
   svg = d3.select(container_selector).append("svg")
         .attr("width", width).attr("height", height)
 
-  var simulation = d3.forceSimulation(nodes);
+  let simulation = d3.forceSimulation(nodes);
 
   // forces
 
