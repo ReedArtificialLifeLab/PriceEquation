@@ -9,7 +9,7 @@
     <br>
     <input type="button" id="submit-graph-json" value="submit" onclick="load_input_json()"> -->
 
-    <div id="config-container">
+    <div id="config_container">
       <h2>Configuration</h2>
       <table>
         <tr>
@@ -20,8 +20,8 @@
           <td>Initial<br>Distribution</td>
           <td>
             <table>
-              <tr><td>Red: <input type="number" id="input-initial-distribution-trait0" value="4"></td></tr>
-              <tr><td>Blue: <input type="number" id="input-initial-distribution-trait1" value="4"></td></tr>
+              <tr><td>Red: <input type="number" id="input_initial_distribution_trait0" value="4"></td></tr>
+              <tr><td>Blue: <input type="number" id="input_initial_distribution_trait1" value="4"></td></tr>
             </table>
           </td>
         </tr>
@@ -29,26 +29,45 @@
           <td>Fitnesses</td>
           <td>
             <table>
-              <tr><td>Red: <input type="number" id="input-fitness-trait0" value="1"></td></tr>
-              <tr><td>Blue: <input type="number" id="input-fitness-trait1" value="1"></td></tr>
+              <tr><td>Red: <input type="number" id="input_fitness_trait0" value="1"></td></tr>
+              <tr><td>Blue: <input type="number" id="input_fitness_trait1" value="1"></td></tr>
             </table>
           </td>
         </tr>
         <tr>
           <td>Parentality</td>
-          <td><input type="number" id="input-parentality" value="2"></td>
+          <td><input type="number" id="input_parentality" value="2"></td>
         </tr>
         <tr>
           <td>Generations</td>
-          <td><input type="number" id="input-generations" value="10"></td>
+          <td><input type="number" id="input_generations" value="2"></td>
         </tr>
         <tr>
-          <td>Edge Physics</td>
-          <td><input type="checkbox" id="input-edge-physics"></td>
+          <td>Older Parents</td>
+          <td><input type="checkbox" id="input_allow_older_parents"></td>
         </tr>
         <tr>
           <td>Measure Trait</td>
-          <td id="input-measure-trait-container"></td>
+          <td id="input_measure_trait_container"></td>
+        </tr>
+        <tr>
+          <td>Edge Physics</td>
+          <td><input type="checkbox" id="input_edge_physics"></td>
+        </tr>
+        <tr>
+          <td>Show Network</td>
+          <td><input type="checkbox" id="input_show_graph" checked
+            onchange="set_hidden('genealogy_graph_container', !event.target.checked)"></td>
+        </tr>
+        <tr>
+          <td>Show GPE Table</td>
+          <td><input type="checkbox" checked
+            onchange="set_hidden('gpe_table_container', !event.target.checked)"></td>
+        </tr>
+        <tr>
+          <td>Show GPE Graph</td>
+          <td><input type="checkbox" checked
+            onchange="set_hidden('gpe_graph_container', !event.target.checked)"></td>
         </tr>
         <!-- <tr>
           <td>...</td>
@@ -56,26 +75,35 @@
         </tr> -->
       </table>
       <br>
-      <button type="button" id="button-generate-genealogy" onclick="generate_genealogy()">generate genealogy</button>
+      <button type="button" id="button_generate_genealogy" onclick="generate_genealogy()">generate genealogy</button>
+      <div id="progress_container_generate_genealogy" class="progress_container">
+        <div id="progress_bar_generate_genealogy" class="progress_bar"></div>
+      </div>
     </div>
     <!--  -->
-    <div id="genealogy-graph-container">
-      <h2>Genealogy Graph</h2>
-      <div id="graph-container"></div>
+    <div id="genealogy_graph_container">
+      <!-- <h2>Genealogy Graph</h2> -->
+      <div id="graph_container"></div>
     </div>
     <!--  -->
-    <div id="gpe-result-container">
-      <h2>GPE Results</h2>
+    <div id="gpe_table_container">
+      <h2>GPE Results Table</h2>
     </div>
-    <div id="gpe-graph-container">
-      <!-- <h2>GPE Graph</h2> -->
-    </div>
+    <div id="gpe_graph_container">
+      <h2>GPE Results Graph</h2>
+      <div id="gpe_graph_container_1"></div>
+      <div id="gpe_graph_container_2"></div>
+    <!-- </div> -->
   </body>
   <head>
     <meta charset="utf-8">
     <title>PGE WebApp (Henry)</title>
+    <!-- styles -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/graph.css">
+    <!-- scripts -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="text/javascript" src="scripts/d3.min.js"></script>
     <script type="text/javascript" src="scripts/plotly.min.js"></script>
     <script type="text/javascript" src="scripts/dynamic_table.js"></script>

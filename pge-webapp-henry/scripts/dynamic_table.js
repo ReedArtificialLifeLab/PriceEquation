@@ -70,6 +70,7 @@ class Dynamic_Table {
         table_data.innerText = entry;
       });
     });
+    MathJax.typeset();
   }
 }
 

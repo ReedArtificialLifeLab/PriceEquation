@@ -10,12 +10,34 @@ function color_from_trait(trait) {
 // fitness : traits -> fitness score
 // parents_count : number of parents each node has
 // generations_count : number of generations_count
-function create_simple_genealogy(initial_distribution, fitness, parents_count, generations_count) {
-  var graph = new Graph();
+// progress : { container:element, bar:element }
+function create_simple_genealogy(
+  initial_distribution, fitness, parents_count, generations_count,
+  allow_older_parents=false,
+  progress=null)
+{
+  let graph = new Graph();
+  let trait_count = initial_distribution.length;
+  let ancestor_ids = [];
 
-  var trait_count = initial_distribution.length;
+  //
+  // progress
+  // TODO: this doesn't work... probably because its during the execution of a function
+  //
 
-  var ancestor_ids = [];
+  progress.percent = 0;
+  let progress_increment = 100/generations_count;
+
+  function update_progress() {
+    // progress.bar.style.width = Math.round(progress.percent).toString() + "%";
+    // console.log(progress.bar.style.width);
+  }
+  update_progress();
+
+  function increment_progress() {
+    // progress.percent = Math.min(100, progress.percent + progress_increment);
+    // update_progress();
+  }
 
   // initial generation
   initial_distribution.forEach((member_count, trait) => {
@@ -25,8 +47,11 @@ function create_simple_genealogy(initial_distribution, fitness, parents_count, g
       ancestor_ids.push(node_id);
     }
   });
+  increment_progress();
 
-  var population = ancestor_ids.length;
+  //
+
+  let population = ancestor_ids.length;
 
   function calculate_parent_weighted_ids(parent_ids) {
     let weighted_ids = {};
@@ -89,7 +114,6 @@ function create_simple_genealogy(initial_distribution, fitness, parents_count, g
     return select_weighted(weighted_traits.items);
   }
 
-  // subsequent generations_count
   for (var generation_index = 1; generation_index < generations_count; generation_index++) {
     let ancestor_weighted_ids = calculate_parent_weighted_ids(ancestor_ids);
     let child_ids = [];
@@ -116,10 +140,16 @@ function create_simple_genealogy(initial_distribution, fitness, parents_count, g
         graph.add_edge(parent_id, child_id, {stroke: color})
       });
     }
-    // choose from all ancestors
-    // ancestor_ids = ancestor_ids.concat(child_ids);
-    // choose only from immediately previous generation
-    ancestor_ids = child_ids;
+
+    if (allow_older_parents) {
+      // choose from all ancestors
+      ancestor_ids = ancestor_ids.concat(child_ids);
+    } else {
+      // choose only from immediately previous generation
+      ancestor_ids = child_ids;
+    }
+
+    increment_progress();
   }
 
   return graph;

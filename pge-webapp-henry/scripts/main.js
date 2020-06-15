@@ -31,7 +31,7 @@ var genealogy_config = {};
 
 var genealogy = null;
 
-var gpe_config_inputs = null;
+var gpe_config_inputs = {};
 var gpe_config = {};
 
 // gpe analysis
@@ -45,15 +45,21 @@ var gpe_analysis = null;
 // genealogy config
 //
 
-genealogy_config_inputs = {
-  initial_distribution_trait0: document.getElementById("input-initial-distribution-trait0"),
-  initial_distribution_trait1: document.getElementById("input-initial-distribution-trait1"),
-  fitness_trait0: document.getElementById("input-fitness-trait0"),
-  fitness_trait1: document.getElementById("input-fitness-trait1"),
-  parentality: document.getElementById("input-parentality"),
-  generations: document.getElementById("input-generations"),
-  edge_physics: document.getElementById("input-edge-physics")
-};
+genealogy_config_inputs = {};
+
+function add_genealogy_config_input(id) {
+  genealogy_config_inputs[id] = document.getElementById("input_"+id);
+}
+
+add_genealogy_config_input("initial_distribution_trait0");
+add_genealogy_config_input("initial_distribution_trait1");
+add_genealogy_config_input("fitness_trait0");
+add_genealogy_config_input("fitness_trait1");
+add_genealogy_config_input("parentality");
+add_genealogy_config_input("generations");
+add_genealogy_config_input("allow_older_parents");
+add_genealogy_config_input("edge_physics");
+add_genealogy_config_input("show_graph");
 
 function load_genealogy_config() {
   genealogy_config.initial_distribution = [
@@ -72,11 +78,15 @@ function load_genealogy_config() {
 
   genealogy_config.generations_count = parseInt(genealogy_config_inputs.generations.value);
 
+  genealogy_config.allow_older_parents = genealogy_config_inputs.allow_older_parents.checked
+
   if (genealogy_config_inputs.edge_physics.checked) {
     genealogy_config.link_strength = 1;
   } else {
     genealogy_config.link_strength = 0;
   }
+
+  genealogy_config.show_graph = genealogy_config_inputs.show_graph.checked;
 }
 
 //
@@ -94,7 +104,7 @@ function generate_gpe_config_inputs() {
     return
     gpe_config_inputs.measure_trait.remove();
   }
-  let container = document.getElementById("input-measure-trait-container");
+  let container = document.getElementById("input_measure_trait_container");
   let measure_trait = document.createElement("select");
   container.appendChild(measure_trait);
   gpe_config_inputs.measure_trait = measure_trait;
@@ -126,15 +136,24 @@ function load_configs() {
 // graph
 //
 
+var genealogy_progress = {
+  container: document.getElementById("progress_container_generate_genealogy"),
+  bar: document.getElementById("progress_bar_generate_genealogy")
+};
+
 function generate_genealogy() {
   load_configs();
+
   genealogy = create_simple_genealogy(
     genealogy_config.initial_distribution,
     genealogy_config.fitness,
     genealogy_config.parents_count,
-    genealogy_config.generations_count
+    genealogy_config.generations_count,
+    allow_older_parents=genealogy_config.allow_older_parents,
+    progress=genealogy_progress
   );
-  simulate_graph(genealogy, 600, 600, "#graph-container", link_strength=genealogy_config.link_strength);
+
+  simulate_graph(genealogy, 600, 600, "#graph_container", link_strength=genealogy_config.link_strength, show_graph=genealogy_config.show_graph);
   calculate_gpe_result();
 }
 
@@ -143,14 +162,15 @@ function generate_genealogy() {
 //
 
 // initialize gpe result table
-gpe_result_table = new Dynamic_Table(document.getElementById("gpe-result-container"));
+gpe_result_table = new Dynamic_Table(
+  document.getElementById("gpe_table_container"));
 gpe_result_table.add_column("gen", "generation")
-gpe_result_table.add_column("covt_a", "covt_ancestors");
-gpe_result_table.add_column("ave(DX)", "ave_DX");
-gpe_result_table.add_column("covt_d", "covt_descendants");
-gpe_result_table.add_column("Xbar_a", "Xbar_ancestors");
-gpe_result_table.add_column("Xbar_d", "Xbar_descendants");
-gpe_result_table.add_column("DXbar", "DXbar");
+gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^a_*, X^a)\\)", "covt_ancestors");
+gpe_result_table.add_column("\\(\\textit{ave}(\\Delta X)\\)", "ave_DX");
+gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^*_d, X_d)\\)", "covt_descendants");
+gpe_result_table.add_column("\\(\\overline{X}^a\\)", "Xbar_ancestors");
+gpe_result_table.add_column("\\(\\overline{X}_d\\)", "Xbar_descendants");
+gpe_result_table.add_column("\\(\\Delta\\overline{X}\\)", "DXbar");
 
 function parse_gpe_result(x) {
   return Math.round(parseFloat(x) * gpe_config.precision) / gpe_config.precision;
@@ -203,3 +223,25 @@ function calculate_gpe_result(ancestor_level) {
 //
 
 generate_genealogy();
+
+//
+// utilities
+//
+
+function toggle_hidden(id) {
+  let element = document.getElementById(id);
+  if (element.classList.contains("hidden")) {
+    element.classList.remove("hidden");
+  } else {
+    element.classList.add("hidden");
+  }
+}
+
+function set_hidden(id, is_hidden) {
+  let element = document.getElementById(id);
+  if (is_hidden && !element.classList.contains("hidden")) {
+    element.classList.add("hidden");
+  } else if (!is_hidden && element.classList.contains("hidden")) {
+    element.classList.remove("hidden");
+  }
+}

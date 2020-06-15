@@ -3,31 +3,37 @@ html, body {
   padding: 0;
   padding: 10px;
 
-  font-family: menlo;
+  font_family: menlo;
 }
 
-#config-container {
-  vertical-align: top;
+#config_container {
+  vertical_align: top;
+  display: inline-block;
+  margin: 0;
+}
+
+#genealogy_graph_container {
   display: inline-block;
 }
 
-#genealogy-graph-container {
+#graph_container {
   display: inline-block;
+  /* border: 1px solid black; */
 }
 
-#graph-container {
-  display: inline-block;
-  border: 1px solid black;
-}
-
-#gpe-result-container {
-  display: inline-block;
-  vertical-align: top;
-}
-
-#gpe-graph-container {
+#gpe_table_container {
   display: inline-block;
   vertical-align: top;
+}
+
+#gpe_graph_container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#gpe_graph_container > div {
+  vertical-align: top;
+  /* display: inline-block; */
 }
 
 h2 {
@@ -45,6 +51,10 @@ table, th, td {
 th {
   background: black;
   color: white;
+  border: none;
+  border-left: 4px solid white;
+  border-right: 4px solid white;
+  padding: 5px;
 }
 
 td {
@@ -60,7 +70,7 @@ input[type="number"] {
   width: 50px;
 }
 
-#button-generate-genealogy {
+#button_generate_genealogy {
   margin: auto;
   background: black;
   color: white;
@@ -75,4 +85,30 @@ input[type="number"] {
 
 .output {
   display: inline-block;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+  /* border: 1px solid red; */
+  height: 0;
+  width: 0;
+}
+
+#progress_container_generate_genealogy {
+  margin-top: 10px;
+  display: none;
+  visibility: hidden;
+}
+
+.progress_container {
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 0 0 2px black inset;
+}
+
+.progress_bar {
+  width: 0%;
+  height: 10px;
+  background-color: black;
 }
