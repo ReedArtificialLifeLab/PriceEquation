@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <body>
-    <h1>PGE WebApp (Henry)</h1>
+    <h1>GPE WebApp (Henry)</h1>
 
     <hr>
 
@@ -10,23 +10,29 @@
     <input type="button" id="submit-graph-json" value="submit" onclick="load_input_json()"> -->
 
     <div id="config_container">
-      <h2>Configuration</h2>
-      <table>
+      <!-- <h2>Configuration</h2> -->
+      <table id="config_table">
         <tr>
           <th>Parameter</th>
           <th>Value</th>
         </tr>
         <tr>
-          <td>Initial<br>Distribution</td>
+          <td>
+            Initial<br>Distribution
+            <span class="tooltip">The number of members with each trait in the 0th generation.</span>
+          </td>
           <td>
             <table>
-              <tr><td>Red: <input type="number" id="input_initial_distribution_trait0" value="4"></td></tr>
-              <tr><td>Blue: <input type="number" id="input_initial_distribution_trait1" value="4"></td></tr>
+              <tr><td>Red: <input type="number" id="input_initial_distribution_trait0" value="5"></td></tr>
+              <tr><td>Blue: <input type="number" id="input_initial_distribution_trait1" value="5"></td></tr>
             </table>
           </td>
         </tr>
         <tr>
-          <td>Fitnesses</td>
+          <td>
+            Fitnesses
+            <span class="tooltip">The relative fitnesses of each trait.</span>
+          </td>
           <td>
             <table>
               <tr><td>Red: <input type="number" id="input_fitness_trait0" value="1"></td></tr>
@@ -35,37 +41,61 @@
           </td>
         </tr>
         <tr>
-          <td>Parentality</td>
+          <td>
+            Parentality
+            <span class="tooltip">The number of parents that each member has. A member's trait is determined by a polysex function of it's parents' traits.</span>
+          </td>
           <td><input type="number" id="input_parentality" value="2"></td>
         </tr>
         <tr>
-          <td>Generations</td>
-          <td><input type="number" id="input_generations" value="2"></td>
+          <td>
+            Generations
+            <span class="tooltip">How many generations to produce.</span>
+          </td>
+          <td><input type="number" id="input_generations" value="5"></td>
         </tr>
         <tr>
-          <td>Older Parents</td>
+          <td>
+            Older Parents
+            <span class="tooltip"><b>True:</b> members choose parents from the entire ancestry. <b>False:</b> members choose parents only from the immediately previous generation.</span>
+          </td>
           <td><input type="checkbox" id="input_allow_older_parents"></td>
         </tr>
         <tr>
-          <td>Measure Trait</td>
+          <td>
+            Measure Trait
+            <span class="tooltip">The trait to measure GPE results for.</span>
+          </td>
           <td id="input_measure_trait_container"></td>
         </tr>
         <tr>
-          <td>Edge Physics</td>
+          <td>
+            Edge Physics
+            <span class="tooltip"><b>True:</b>edges between members will attract them in the visualization, although members are still coerced into generation levels. <b>False:</b> members are placed evenly-spaced in their generation level without regard for their closeness to edges between parents/children.</span>
+          </td>
           <td><input type="checkbox" id="input_edge_physics"></td>
         </tr>
         <tr>
-          <td>Show Network</td>
+          <td>
+            Show Network
+            <span class="tooltip"><b>True:</b> Genealogy network visualization is generated and displayed (slow for large number of generations and members). <b>False:</b> Genealogy network visualization is neither generated nor displayed (fast for large numbers of generations and members).</span>
+          </td>
           <td><input type="checkbox" id="input_show_graph" checked
             onchange="set_hidden('genealogy_graph_container', !event.target.checked)"></td>
         </tr>
         <tr>
-          <td>Show GPE Table</td>
+          <td>
+            Show GPE Table
+            <span class="tooltip">Show or hide GPE result table. This does not affect performance, as the calculations are still performed and displaying text is negligably complex.</span>
+          </td>
           <td><input type="checkbox" checked
             onchange="set_hidden('gpe_table_container', !event.target.checked)"></td>
         </tr>
         <tr>
-          <td>Show GPE Graph</td>
+          <td>
+            Show GPE Graphs
+            <span class="tooltip">Show or hide GPE result graphs. This may slightly affect performance, but is typically negligable.</span>
+          </td>
           <td><input type="checkbox" checked
             onchange="set_hidden('gpe_graph_container', !event.target.checked)"></td>
         </tr>
@@ -87,17 +117,17 @@
     </div>
     <!--  -->
     <div id="gpe_table_container">
-      <h2>GPE Results Table</h2>
+      <!-- <h2>GPE Results Table</h2> -->
     </div>
     <div id="gpe_graph_container">
-      <h2>GPE Results Graph</h2>
-      <div id="gpe_graph_container_1"></div>
-      <div id="gpe_graph_container_2"></div>
+      <!-- <h2>GPE Results Graphs</h2> -->
+      <div id="gpe_graph_1" class="gpe_graph"></div>
+      <div id="gpe_graph_2" class="gpe_graph"></div>
     <!-- </div> -->
   </body>
   <head>
     <meta charset="utf-8">
-    <title>PGE WebApp (Henry)</title>
+    <title>GPE WebApp (Henry)</title>
     <!-- styles -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/graph.css">
@@ -106,6 +136,7 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="text/javascript" src="scripts/d3.min.js"></script>
     <script type="text/javascript" src="scripts/plotly.min.js"></script>
+    <script type="text/javascript" src="scripts/utilities.js"></script>
     <script type="text/javascript" src="scripts/dynamic_table.js"></script>
     <script type="text/javascript" src="scripts/graph.js"></script>
     <script type="text/javascript" src="scripts/genealogy.js"></script>

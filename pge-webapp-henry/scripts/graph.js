@@ -194,7 +194,7 @@ function graph_from_json(json) {
 
 var svg = null;
 
-function simulate_graph(graph, width, height, container_selector, link_strength=1, show_graph=true) {
+function simulate_graph(graph, container_selector, width, height, link_strength=1, show_graph=true) {
   let nodes = graph.get_node_array()
                 .map((node) => JSON.parse(JSON.stringify(node)));
   let edges = graph.get_edge_array()

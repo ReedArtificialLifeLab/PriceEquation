@@ -1,8 +1,11 @@
-var gpe_graph_svg = null;
+const gpe_graph_layout = {
+  width: 600,
+  height: 400
+}
 
-const gpe_graph_layout = {top: 10, right: 30, bottom: 30, left: 60};
-gpe_graph_layout.width = 460 - gpe_graph_layout.left - gpe_graph_layout.right;
-gpe_graph_layout.height = 400 - gpe_graph_layout.top - gpe_graph_layout.bottom;
+// const gpe_graph_layout = {top: 10, right: 30, bottom: 30, left: 60};
+// gpe_graph_layout.width = 460 - gpe_graph_layout.left - gpe_graph_layout.right;
+// gpe_graph_layout.height = 400 - gpe_graph_layout.top - gpe_graph_layout.bottom;
 
 const gpe_graph_colors = {
   covt_a: "red",
@@ -70,8 +73,8 @@ function update_gpe_graph() {
 
     let layout = {
       title: "PGE Results (Proportion Changes)",
-      width: 800,
-      height: 600,
+      width: gpe_graph_layout.width,
+      height: gpe_graph_layout.height,
       yaxis: {
         title: "proportion change",
         range: [-1, 1]
@@ -79,7 +82,7 @@ function update_gpe_graph() {
       showlegend: true
     };
 
-    Plotly.newPlot("gpe_graph_container_1", data, layout);
+    Plotly.newPlot("gpe_graph_1", data, layout);
   }
 
   function generate_plot2() {
@@ -89,8 +92,8 @@ function update_gpe_graph() {
 
     let layout = {
       title: "PGE Results (Proportion)",
-      width: 800,
-      height: 600,
+      width: gpe_graph_layout.width,
+      height: gpe_graph_layout.height,
       yaxis: {
         title: "proportion",
         range: [0, 1]
@@ -98,7 +101,7 @@ function update_gpe_graph() {
       showlegend: true
     };
 
-    Plotly.newPlot("gpe_graph_container_2", data, layout);
+    Plotly.newPlot("gpe_graph_2", data, layout);
   }
 
   generate_plot1();

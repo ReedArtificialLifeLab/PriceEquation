@@ -9,16 +9,21 @@ html, body {
 #config_container {
   vertical_align: top;
   display: inline-block;
-  margin: 0;
+  margin-bottom: 0;
+}
+
+#config_table {
+  vertical-align: top;
 }
 
 #genealogy_graph_container {
   display: inline-block;
+  vertical-align: top;
 }
 
 #graph_container {
   display: inline-block;
-  /* border: 1px solid black; */
+  vertical-align: top;
 }
 
 #gpe_table_container {
@@ -31,9 +36,9 @@ html, body {
   vertical-align: top;
 }
 
-#gpe_graph_container > div {
+.gpe_graph {
   vertical-align: top;
-  /* display: inline-block; */
+  display: inline-block;
 }
 
 h2 {
@@ -55,6 +60,7 @@ th {
   border-left: 4px solid white;
   border-right: 4px solid white;
   padding: 5px;
+  font-size: 10pt;
 }
 
 td {
@@ -63,15 +69,22 @@ td {
 
 input {
   font-family: menlo;
-  font-size: 12pt;
+  font-size: 10pt;
 }
 
 input[type="number"] {
   width: 50px;
 }
 
+#gpe_table_container {
+  overflow-y: scroll;
+  max-height: 500px;
+}
+
 #button_generate_genealogy {
   margin: auto;
+  margin-top: 0px;
+  margin-bottom: 0;
   background: black;
   color: white;
   border: none;
@@ -79,7 +92,7 @@ input[type="number"] {
   text-align: center;
   text-decoration: none;
   display: block;
-  font-size: 16pt;
+  font-size: 10pt;
   font-family: menlo;
 }
 
@@ -96,7 +109,6 @@ input[type="number"] {
 }
 
 #progress_container_generate_genealogy {
-  margin-top: 10px;
   display: none;
   visibility: hidden;
 }
@@ -111,4 +123,25 @@ input[type="number"] {
   width: 0%;
   height: 10px;
   background-color: black;
+}
+
+
+/*  */
+/*  */
+/*  */
+
+td:hover > span.tooltip {
+  display: block;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  border: 2px dashed black;
+  background-color: grey;
+  color: lime;
+  padding: 5px;
+  max-width: 300px;
+  font-size: 10pt;
+  z-index: 10;
 }

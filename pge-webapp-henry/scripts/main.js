@@ -1,25 +1,3 @@
-// json
-
-// var input_graph_json = document.getElementById("input-graph-json");
-//
-// var graph = null;
-//
-// function load_input_json() {
-//   let file = input_graph_json.files[0];
-//   let reader = new FileReader();
-//   reader.readAsText(file, "UTF-8");
-//   reader.onload = (e) => {
-//     let graph_text = e.target.result;
-//     let graph_json = JSON.parse(graph_text);
-//     graph = graph_from_json(graph_json);
-//     simulate_graph(graph, 400, 400, "#graph-container");
-//   }
-//   reader.onerror = (e) => {
-//     console.log("error reading file");
-//     console.log(e);
-//   }
-// }
-
 //
 // global variables
 //
@@ -141,6 +119,11 @@ var genealogy_progress = {
   bar: document.getElementById("progress_bar_generate_genealogy")
 };
 
+const genealogy_graph_layout = {
+  width: 400,
+  height: 500
+}
+
 function generate_genealogy() {
   load_configs();
 
@@ -153,7 +136,13 @@ function generate_genealogy() {
     progress=genealogy_progress
   );
 
-  simulate_graph(genealogy, 600, 600, "#graph_container", link_strength=genealogy_config.link_strength, show_graph=genealogy_config.show_graph);
+  simulate_graph(
+    genealogy,
+    "#graph_container",
+    genealogy_graph_layout.width,
+    genealogy_graph_layout.height,
+    link_strength=genealogy_config.link_strength,
+    show_graph=genealogy_config.show_graph);
   calculate_gpe_result();
 }
 
@@ -202,8 +191,8 @@ function update_gpe_result_outputs() {
 // gpe analysis
 //
 
-function calculate_gpe_result(ancestor_level) {
-  gpe_analysis = new GPE_Analysis(genealogy, gpe_config.trait, ancestor_level);
+function calculate_gpe_result() {
+  gpe_analysis = new GPE_Analysis(genealogy, gpe_config.trait);
 
   gpe_result = {
     covt_ancestors: gpe_analysis.covt_ancestors(),
@@ -222,26 +211,6 @@ function calculate_gpe_result(ancestor_level) {
 // run
 //
 
-generate_genealogy();
-
-//
-// utilities
-//
-
-function toggle_hidden(id) {
-  let element = document.getElementById(id);
-  if (element.classList.contains("hidden")) {
-    element.classList.remove("hidden");
-  } else {
-    element.classList.add("hidden");
-  }
-}
-
-function set_hidden(id, is_hidden) {
-  let element = document.getElementById(id);
-  if (is_hidden && !element.classList.contains("hidden")) {
-    element.classList.add("hidden");
-  } else if (!is_hidden && element.classList.contains("hidden")) {
-    element.classList.remove("hidden");
-  }
-}
+window.onload = () => {
+  generate_genealogy();
+};
