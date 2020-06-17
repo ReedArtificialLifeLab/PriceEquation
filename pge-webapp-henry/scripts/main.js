@@ -175,7 +175,7 @@ function update_gpe_result_outputs() {
     let ave_DX = gpe_analysis.ave_DX();
     let covt_d = gpe_analysis.cov_Ctil_X_descendants();
     let DXbar = gpe_analysis.DXbar_simple();
-    let error = DXbar - (covt_a + ave_DX - covt_d);
+    let error = Math.abs(DXbar - (covt_a + ave_DX - covt_d));
     gpe_result_table.add_row([
       ancestor_level+"→"+(ancestor_level+1),
       parse_gpe_result(covt_a),

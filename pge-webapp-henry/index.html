@@ -52,7 +52,7 @@
             Generations
             <span class="tooltip">How many generations to produce.</span>
           </td>
-          <td><input type="number" id="input_generations" value="2"></td>
+          <td><input type="number" id="input_generations" value="5"></td>
         </tr>
         <tr>
           <td>
@@ -80,7 +80,6 @@
             Show Network
             <span class="tooltip"><b>True:</b> Genealogy network visualization is generated and displayed (slow for large number of generations and members).<br><b>False:</b> Genealogy network visualization is neither generated nor displayed (fast for large numbers of generations and members).</span>
           </td>
-          <!-- TODO: mark checked when done testing -->
           <td><input type="checkbox" id="input_show_graph" checked
             onchange="set_hidden('genealogy_graph_container', !event.target.checked)"></td>
         </tr>
