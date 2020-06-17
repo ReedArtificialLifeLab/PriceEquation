@@ -8,7 +8,7 @@ const gpe_graph_layout = {
 // gpe_graph_layout.height = 400 - gpe_graph_layout.top - gpe_graph_layout.bottom;
 
 const gpe_graph_colors = {
-  covt_a: "red",
+  cov_Ctil_X_a: "red",
   ave_DX: "blue",
   Xbar_a: "green",
   DXbar: "orange",
@@ -17,8 +17,9 @@ const gpe_graph_colors = {
 function update_gpe_graph() {
   let xs = [];
   let ys = {
-    covt_a: [],
+    cov_Ctil_X_a: [],
     ave_DX: [],
+    cov_Ctil_X_d: [],
     Xbar_a: [],
     DXbar: []
   };
@@ -27,17 +28,18 @@ function update_gpe_graph() {
        gen_index++)
   {
       xs.push(gen_index);
-      ys.covt_a.push(gpe_result_table.get_entry("covt_ancestors", gen_index));
+      ys.cov_Ctil_X_a.push(gpe_result_table.get_entry("cov_Ctil_X_ancestors", gen_index));
       ys.ave_DX.push(gpe_result_table.get_entry("ave_DX", gen_index));
+      ys.cov_Ctil_X_d.push(gpe_result_table.get_entry("cov_Ctil_X_descendants", gen_index));
       ys.Xbar_a.push(gpe_result_table.get_entry("Xbar_ancestors", gen_index));
       ys.DXbar.push(gpe_result_table.get_entry("DXbar", gen_index));
   }
 
   let trace = {
-    covt_a: {
-      name: "covt_a",
+    cov_Ctil_X_a: {
+      name: "cov(Ctil_a, X_a)",
       x: xs,
-      y: ys.covt_a,
+      y: ys.cov_Ctil_X_a,
       type: "scatter"
     },
     ave_DX: {
@@ -46,15 +48,20 @@ function update_gpe_graph() {
       y: ys.ave_DX,
       type: "scatter"
     },
+    cov_Ctil_X_d: {
+      name: "cov(Ctil_d, X_d)",
+      x: xs,
+      y: ys.cov_Ctil_X_d,
+      type: "scatter"
+    },
     Xbar_a: {
       name: "Xbar_a",
-      yaxis: "y2",
       x: xs,
       y: ys.Xbar_a,
       type: "scatter",
       fill: "tonexty",
-      fillcolor: color_from_trait(gpe_analysis.trait),
-      line: { color: color_from_trait(gpe_analysis.trait) }
+      fillcolor: color_from_trait(gpe_config.trait),
+      line: { color: color_from_trait(gpe_config.trait) }
     },
     DXbar: {
       name: "DXbar",
@@ -66,8 +73,9 @@ function update_gpe_graph() {
 
   function generate_plot1() {
     let data = [
-      trace.covt_a,
-      // trace.ave_DX,
+      trace.cov_Ctil_X_a,
+      trace.ave_DX,
+      trace.cov_Ctil_X_d,
       trace.DXbar
     ];
 
@@ -76,7 +84,6 @@ function update_gpe_graph() {
       width: gpe_graph_layout.width,
       height: gpe_graph_layout.height,
       yaxis: {
-        title: "proportion change",
         range: [-1, 1]
       },
       showlegend: true
@@ -90,18 +97,17 @@ function update_gpe_graph() {
       trace.Xbar_a
     ];
 
-    let layout = {
+    let layout2 = {
       title: "PGE Results (Proportion)",
       width: gpe_graph_layout.width,
       height: gpe_graph_layout.height,
       yaxis: {
-        title: "proportion",
         range: [0, 1]
       },
       showlegend: true
     };
 
-    Plotly.newPlot("gpe_graph_2", data, layout);
+    Plotly.newPlot("gpe_graph_2", data, layout2);
   }
 
   generate_plot1();

@@ -42,7 +42,10 @@ function create_simple_genealogy(
   // initial generation
   initial_distribution.forEach((member_count, trait) => {
     for (var i = 0; i < member_count; i++) {
-      let node_id = graph.add_node({trait: trait, fill: color_from_trait(trait)});
+      let node_id = graph.add_node({
+        trait: trait,
+        fill: color_from_trait(trait)
+      });
       graph.set_level(node_id, 0);
       ancestor_ids.push(node_id);
     }
@@ -57,7 +60,7 @@ function create_simple_genealogy(
     let weighted_ids = {};
     let fitness_total = 0;
     parent_ids.forEach((node_id) => {
-      let trait = graph.get_node(node_id).trait;
+      let trait = graph.get_node_metadata(node_id).trait;
       let trait_fitness = fitness(trait);
       weighted_ids[node_id] = trait_fitness;
       fitness_total += trait_fitness;
@@ -108,7 +111,7 @@ function create_simple_genealogy(
   function polysex(parent_ids) {
     let weighted_traits = new DefaultDictionary(() => 0);
     parent_ids.forEach((parent_id) => {
-      let parent_trait = graph.get_node(parent_id).trait;
+      let parent_trait = graph.get_node_metadata(parent_id).trait;
       weighted_traits.modify(parent_trait, (x) => x + 1/parent_ids.length);
     });
     return select_weighted(weighted_traits.items);
@@ -131,13 +134,13 @@ function create_simple_genealogy(
           replacement=false)
         .map((parent_id) => parseInt(parent_id));
       // parents generates trait for child
-      graph.get_node(child_id)["trait"] = polysex(parent_ids);
-      let color = color_from_trait(graph.get_node(child_id)["trait"]);
-      graph.get_node(child_id)["fill"] = color;
+      graph.get_node_metadata(child_id).trait = polysex(parent_ids);
+      let color = color_from_trait(graph.get_node_metadata(child_id).trait);
+      graph.get_node_metadata(child_id).fill = color;
 
       // link parents to child
       parent_ids.forEach((parent_id) => {
-        graph.add_edge(parent_id, child_id, {stroke: color})
+        graph.add_edge(parent_id, child_id, { stroke: color })
       });
     }
 

@@ -183,7 +183,8 @@ function calculate(nodes, edges) {
 
     //Covariance of Cbar_a and X_a
     sum = 0;
-    for(var i = 0; i < Cbar_a.length; i++) sum += (Cbar_a[i] - meanCbar_a) * (X_a[i] - meanX_a);
+    for(var i = 0; i < Cbar_a.length; i++)
+      sum += (Cbar_a[i] - meanCbar_a) * (X_a[i] - meanX_a);
     var term1 = sum / Cbar_a.length;
 
     ///////////////////////////////////////////////////////////////
@@ -226,7 +227,7 @@ function calculate(nodes, edges) {
     //Average character of ancestors
     var meanX_d = Number(bnodeCount2) / X_d.length;
 
-    //Covariance of Cbar_a and X_a
+    //Covariance of Cbar_d and X_d
     sum = 0;
     for(var i = 0; i < Cbar_d.length; i++) sum += (Cbar_d[i] - meanCbar_d) * (X_d[i] - meanX_d);
     var term3 = sum / Cbar_d.length;

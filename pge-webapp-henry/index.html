@@ -52,12 +52,12 @@
             Generations
             <span class="tooltip">How many generations to produce.</span>
           </td>
-          <td><input type="number" id="input_generations" value="5"></td>
+          <td><input type="number" id="input_generations" value="2"></td>
         </tr>
         <tr>
           <td>
             Older Parents
-            <span class="tooltip"><b>True:</b> members choose parents from the entire ancestry. <b>False:</b> members choose parents only from the immediately previous generation.</span>
+            <span class="tooltip"><b>True:</b> members choose parents from the entire ancestry.<br><b>False:</b> members choose parents only from the immediately previous generation.</span>
           </td>
           <td><input type="checkbox" id="input_allow_older_parents"></td>
         </tr>
@@ -71,15 +71,16 @@
         <tr>
           <td>
             Edge Physics
-            <span class="tooltip"><b>True:</b>edges between members will attract them in the visualization, although members are still coerced into generation levels. <b>False:</b> members are placed evenly-spaced in their generation level without regard for their closeness to edges between parents/children.</span>
+            <span class="tooltip"><b>True:</b>edges between members will attract them in the visualization, although members are still coerced into generation levels.<br><b>False:</b> members are placed evenly-spaced in their generation level without regard for their closeness to edges between parents/children.</span>
           </td>
           <td><input type="checkbox" id="input_edge_physics"></td>
         </tr>
         <tr>
           <td>
             Show Network
-            <span class="tooltip"><b>True:</b> Genealogy network visualization is generated and displayed (slow for large number of generations and members). <b>False:</b> Genealogy network visualization is neither generated nor displayed (fast for large numbers of generations and members).</span>
+            <span class="tooltip"><b>True:</b> Genealogy network visualization is generated and displayed (slow for large number of generations and members).<br><b>False:</b> Genealogy network visualization is neither generated nor displayed (fast for large numbers of generations and members).</span>
           </td>
+          <!-- TODO: mark checked when done testing -->
           <td><input type="checkbox" id="input_show_graph" checked
             onchange="set_hidden('genealogy_graph_container', !event.target.checked)"></td>
         </tr>
@@ -132,8 +133,13 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/graph.css">
     <!-- scripts -->
+
+    <!-- mathjax -->
+    <!-- <script type="text/javascript"
+      src="scripts/es6.js" charset="utf-8"></script> -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <script type="text/javascript" src="scripts/d3.min.js"></script>
     <script type="text/javascript" src="scripts/plotly.min.js"></script>
     <script type="text/javascript" src="scripts/utilities.js"></script>

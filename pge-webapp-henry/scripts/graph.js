@@ -78,12 +78,29 @@ class Graph {
   }
 
   add_node(metadata=false) {
-    let node_id = this.nodes.add(metadata);
+    let node_data = { metadata: {} };
+    if (metadata !== false) { node_data.metadata = metadata };
+    let node_id = this.nodes.add(node_data);
+    node_data.id = node_id;
     return node_id;
   }
 
   get_node(node_id) {
     return this.nodes.get(node_id);
+  }
+
+  get_node_metadata(node_id) {
+    return this.get_node(node_id).metadata;
+  }
+
+  set_node_metadata(node_id, metadata) {
+    this.get_node(node_id).metadata = metadata;
+  }
+
+  update_node_metadata(node_id, metadata_new) {
+    let metadata = this.get_node_metadata(node_id);
+    for (var key in metadata_new)
+    { metadata[key] = metadata_new[key]; }
   }
 
   get_node_array() {
@@ -99,7 +116,13 @@ class Graph {
   }
 
   add_edge(source_id, target_id, metadata) {
-    let edge_id = this.edges.add({source: source_id, target: target_id, metadata: metadata});
+    let edge_data = {
+      source: source_id,
+      target: target_id,
+      metadata: metadata
+    };
+    let edge_id = this.edges.add(edge_data);
+    edge_data.id = edge_id;
     this.edges_from.append_at(source_id, edge_id);
     this.edges_to.append_at(target_id, edge_id);
     this.edges_from_to.append_at(source_id.toString()+":"+target_id.toString(), edge_id)
@@ -108,6 +131,20 @@ class Graph {
 
   get_edge(edge_id) {
     return this.edges.get(edge_id);
+  }
+
+  get_edge_metadata(edge_id) {
+    return this.get_edge(edge_id).metadata;
+  }
+
+  set_edge_metadata(edge_id, metadata) {
+    this.get_edge(edge_id).metadata = metadata;
+  }
+
+  update_edge_metadata(edge_id, metadata_new) {
+    let metadata = this.get_edge_metadata(edge_id);
+    for (var key in metadata_new)
+    { metadata[key] = metadata_new[key]; }
   }
 
   get_edges_from(source_id) {
@@ -131,20 +168,19 @@ class Graph {
   }
 
   exists_edge(parent_id, child_id) {
-    if (this.get_edges_from_to(parent_id, child_id).lenght > 0) {
-      return 1;
-    } else {
-      return 0;
-    }
+    if (this.get_edges_from_to(parent_id, child_id).lenght > 0)
+    { return 1; }
+    else
+    { return 0; }
   }
 
   set_level(node_id, level) {
     this.levels.append_at(level, node_id);
-    this.get_node(node_id).level = level;
+    this.get_node_metadata(node_id).level = level;
   }
 
   get_level(node_id) {
-    return this.get_node(node_id).level;
+    return this.get_node_metadata(node_id).level;
   }
 
   get_level_array() {
@@ -154,6 +190,8 @@ class Graph {
   get_level_node_ids(level) {
     return this.levels.get(level);
   }
+
+
 }
 
 
@@ -222,11 +260,13 @@ function simulate_graph(graph, container_selector, width, height, link_strength=
   // forces
 
   // vertial
-  simulation.force("y", d3.forceY().y((d) => level_ys[d.level]).strength(10));
-  simulation.force("x", d3.forceX().x((d) => width/2).strength(0.25));
+  simulation.force("y", d3.forceY().y(
+    (d) => level_ys[d.metadata.level]).strength(10));
+  simulation.force("x", d3.forceX().x(
+    (d) => width/2).strength(0.25));
   // radial
   // simulation.force("center", d3.forceCenter(width/2, height/2));
-  // simulation.force("r", d3.forceRadial((d) => 0.8*level_ys[d.level]).strength(2))
+  // simulation.force("r", d3.forceRadial((d) => 0.8*level_ys[d.metadata.level]).strength(2))
   // bodies
   simulation.force("charge", d3.forceManyBody().strength(-100));
   simulation.force("link", d3.forceLink().links(edges).strength(link_strength))
@@ -254,7 +294,7 @@ function simulate_graph(graph, container_selector, width, height, link_strength=
       .attr("r", 5)
       .attr("cx", (d) => d.x)
       .attr("cy", (d) => d.y)
-      .attr("fill", (d) => d.fill);
+      .attr("fill", (d) => d.metadata.fill);
     u.exit().remove();
   }
 
