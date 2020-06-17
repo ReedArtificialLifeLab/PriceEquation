@@ -38,7 +38,7 @@ html, body {
 
 .gpe_graph {
   vertical-align: top;
-  display: inline-block;
+  /* display: inline-block; */
 }
 
 h2 {
