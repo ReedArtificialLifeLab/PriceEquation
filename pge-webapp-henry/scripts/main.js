@@ -4,8 +4,9 @@
 
 // genealogy
 
-var genealogy_config_inputs = null;
+var genealogy_config_inputs = {};
 var genealogy_config = {};
+var genealogy_config_defaults = {};
 
 var genealogy = null;
 
@@ -20,21 +21,36 @@ var gpe_result_table = null;
 // genealogy config
 //
 
-genealogy_config_inputs = {};
-
 function add_genealogy_config_input(id) {
-  genealogy_config_inputs[id] = document.getElementById("input_"+id);
+  let element = document.getElementById("input_"+id);
+  genealogy_config_inputs[id] = element;
+  return element;
 }
 
-add_genealogy_config_input("initial_distribution_trait0");
-add_genealogy_config_input("initial_distribution_trait1");
-add_genealogy_config_input("fitness_trait0");
-add_genealogy_config_input("fitness_trait1");
-add_genealogy_config_input("parentality");
-add_genealogy_config_input("generations");
-add_genealogy_config_input("allow_older_parents");
-add_genealogy_config_input("edge_physics");
-add_genealogy_config_input("show_graph");
+genealogy_config_defaults = {
+  initial_distribution_trait0: 2,
+  initial_distribution_trait1: 2,
+  fitness_trait0: 2,
+  fitness_trait1: 2,
+  parentality: 2,
+  generations: 2,
+  allow_older_parents: false,
+  edge_physics: false,
+  show_graph: true
+};
+
+for (var id in genealogy_config_defaults) {
+  let value = genealogy_config_defaults[id];
+  let element = add_genealogy_config_input(id)
+  switch (typeof(value)) {
+    case "number":
+      element.value = value;
+      break;
+    case "boolean":
+      element.checked = value;
+      break;
+  }
+}
 
 function load_genealogy_config() {
   genealogy_config.initial_distribution = [
