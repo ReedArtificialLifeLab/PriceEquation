@@ -166,13 +166,17 @@ function generate_genealogy() {
 // initialize gpe result table
 gpe_result_table = new Dynamic_Table(
   document.getElementById("gpe_table_container"));
+
 gpe_result_table.add_column("gen", "generation")
-gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^a_*, X^a)\\)", "cov_Ctil_X_ancestors");
-gpe_result_table.add_column("\\(\\textit{ave}(\\Delta X)\\)", "ave_DX");
-gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^*_d, X_d)\\)", "cov_Ctil_X_descendants");
+
 gpe_result_table.add_column("\\(\\overline{X}^a\\)", "Xbar_ancestors");
 gpe_result_table.add_column("\\(\\overline{X}_d\\)", "Xbar_descendants");
 gpe_result_table.add_column("\\(\\Delta\\overline{X}\\)", "DXbar");
+
+gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^a_*, X^a)\\)", "cov_Ctil_X_ancestors");
+gpe_result_table.add_column("\\(\\textit{ave}(\\Delta X)\\)", "ave_DX");
+gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^*_d, X_d)\\)", "cov_Ctil_X_descendants");
+
 gpe_result_table.add_column("error", "error");
 
 function parse_gpe_result(x) {
@@ -194,12 +198,12 @@ function update_gpe_result_outputs() {
     let error = DXbar - (covt_a + ave_DX - covt_d);
     gpe_result_table.add_row([
       ancestor_level+"→"+(ancestor_level+1),
-      parse_gpe_result(covt_a),
-      parse_gpe_result(ave_DX),
-      parse_gpe_result(covt_d),
       parse_gpe_result(gpe_analysis.Xbar_ancestors()),
       parse_gpe_result(gpe_analysis.Xbar_descendants()),
       parse_gpe_result(DXbar),
+      parse_gpe_result(covt_a),
+      parse_gpe_result(ave_DX),
+      parse_gpe_result(covt_d),
       parse_gpe_result(error)
     ]);
   }
