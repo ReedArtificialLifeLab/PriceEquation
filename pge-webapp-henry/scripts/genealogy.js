@@ -135,12 +135,13 @@ function create_simple_genealogy(
         .map((parent_id) => parseInt(parent_id));
       // parents generates trait for child
       graph.get_node_metadata(child_id).trait = polysex(parent_ids);
-      let color = color_from_trait(graph.get_node_metadata(child_id).trait);
-      graph.get_node_metadata(child_id).fill = color;
+      let child_color = color_from_trait(graph.get_node_metadata(child_id).trait);
+      graph.get_node_metadata(child_id).fill = child_color;
 
       // link parents to child
       parent_ids.forEach((parent_id) => {
-        graph.add_edge(parent_id, child_id, { stroke: color })
+        let parent_color = color_from_trait(graph.get_node_metadata(parent_id).trait);
+        graph.add_edge(parent_id, child_id, { stroke: parent_color })
       });
     }
 

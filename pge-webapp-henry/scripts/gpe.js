@@ -191,13 +191,18 @@ class GPE_Analysis {
   ave_DX() {
     let ancestor_ids = this.get_ancestor_node_ids();
     let descendant_ids = this.get_descendant_node_ids();
+    let dxs = [];
     let total = 0;
+    let count = 0;
     ancestor_ids.forEach((ancestor_id) => {
       descendant_ids.forEach((descendant_id) => {
-        total += this.DX(ancestor_id, descendant_id);
+        let dx = this.DX(ancestor_id, descendant_id);
+        dxs.push(dx);
+        total += dx;
+        count++;
       });
     });
-    return total/(ancestor_ids.length * descendant_ids.length);
+    return total/count;
   }
 
   // corresponds to equation (1) in KGS paper

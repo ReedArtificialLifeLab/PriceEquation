@@ -28,9 +28,11 @@ class DefaultDictionary {
   constructor (gen_default) {
     this.gen_default = gen_default;
     this.items = {};
+    this.size = 0;
   }
 
   set(key, value) {
+    if (!this.items.hasOwnProperty(key)) { this.size++; }
     this.items[key] = value;
   }
 
@@ -48,6 +50,13 @@ class DefaultDictionary {
       this.items[key] = f(this.gen_default());
     } else {
       this.items[key] = f(this.items[key]);
+    }
+  }
+
+  delete(key) {
+    if (this.items.hasOwnProperty(key)) {
+      delete this.items[key];
+      this.size--;
     }
   }
 
@@ -75,6 +84,18 @@ class Graph {
     this.edges_from_to = new DefaultDictionary(() => []);
 
     this.levels = new DefaultDictionary(() => []);
+  }
+
+  get_width() {
+    let max_width = 0;
+    this.levels.toArray().forEach((level) => {
+      max_width = Math.max(max_width, level.length);
+    });
+    return max_width;
+  }
+
+  get_height() {
+    return this.levels.toArray().length;
   }
 
   add_node(metadata=false) {
@@ -168,15 +189,17 @@ class Graph {
   }
 
   exists_edge(parent_id, child_id) {
-    if (this.get_edges_from_to(parent_id, child_id).lenght > 0)
+    if (this.get_edges_from_to(parent_id, child_id).length > 0)
     { return 1; }
     else
     { return 0; }
   }
 
   set_level(node_id, level) {
+    let level_length = this.levels.get(level).length;
     this.levels.append_at(level, node_id);
     this.get_node_metadata(node_id).level = level;
+    this.get_node_metadata(node_id).row = level_length;
   }
 
   get_level(node_id) {
@@ -232,16 +255,28 @@ function graph_from_json(json) {
 
 var svg = null;
 
-function simulate_graph(graph, container_selector, width, height, link_strength=1, show_graph=true) {
+function simulate_graph(
+    graph,
+    container_selector,
+    width, height,
+    link_strength=1,
+    show_graph=true)
+{
   let nodes = graph.get_node_array()
                 .map((node) => JSON.parse(JSON.stringify(node)));
   let edges = graph.get_edge_array()
                 .map((edge) => JSON.parse(JSON.stringify(edge)));
 
   let level_ys = {};
-  let levels_size = graph.get_level_array().length;
-  for (var i = 0; i < levels_size; i++) {
-    level_ys[i] = height*(i+1)/(levels_size+1);
+  let i_max = graph.get_height();
+  for (var i = 0; i < i_max; i++) {
+    level_ys[i] = height*(i + 1) / (i_max + 1);
+  }
+
+  let row_xs = {};
+  i_max = graph.get_width();
+  for (var i = 0; i < i_max; i++) {
+    row_xs[i] = width*(i + 1) / (i_max + 1);
   }
 
   if (svg !== null)  {
@@ -253,12 +288,26 @@ function simulate_graph(graph, container_selector, width, height, link_strength=
   }
 
   svg = d3.select(container_selector).append("svg")
-        .attr("width", width).attr("height", height)
+        .attr("width", width)
+        .attr("height", height)
+
+  nodes.forEach((node) => {
+    node.fx = row_xs[node.metadata.row];
+    node.fy = level_ys[node.metadata.level];
+  });
 
   let simulation = d3.forceSimulation(nodes);
 
   // forces
 
+  // simulation.force("y", d3.forceY().y(
+  //   (d) => level_ys[d.metadata.level]).strength(10));
+  // simulation.force("x", d3.forceX().x(
+  //   (d) => width/2).strength(0.25));
+  // simulation.force("charge", d3.forceManyBody().strength(-100));
+  simulation.force("link", d3.forceLink().links(edges).strength(link_strength));
+
+  /* OLD
   // vertial
   simulation.force("y", d3.forceY().y(
     (d) => level_ys[d.metadata.level]).strength(10));
@@ -270,6 +319,7 @@ function simulate_graph(graph, container_selector, width, height, link_strength=
   // bodies
   simulation.force("charge", d3.forceManyBody().strength(-100));
   simulation.force("link", d3.forceLink().links(edges).strength(link_strength))
+  */
 
   // tick
 
