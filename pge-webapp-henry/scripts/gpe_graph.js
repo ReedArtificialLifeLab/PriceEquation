@@ -98,6 +98,7 @@ function update_gpe_graph() {
       width: gpe_graph_layout.width,
       height: gpe_graph_layout.height,
       xaxis: {
+        title: "ancestor generation",
         autotick: false,
         tick0: 0,
         dtick: 1
@@ -124,6 +125,7 @@ function update_gpe_graph() {
       width: gpe_graph_layout.width,
       height: gpe_graph_layout.height,
       xaxis: {
+        title: "ancestor generation",
         autotick: false,
         tick0: 0,
         dtick: 1
@@ -144,6 +146,7 @@ function update_gpe_graph() {
       width: gpe_graph_layout.width,
       height: gpe_graph_layout.height,
       xaxis: {
+        title: "generation",
         autotick: false,
         tick0: 0,
         dtick: 1

@@ -29,14 +29,14 @@ function create_simple_genealogy(
   let progress_increment = 100/generations_count;
 
   function update_progress() {
-    // progress.bar.style.width = Math.round(progress.percent).toString() + "%";
-    // console.log(progress.bar.style.width);
+    progress.bar.style.width = Math.round(progress.percent).toString() + "%";
   }
   update_progress();
 
   function increment_progress() {
-    // progress.percent = Math.min(100, progress.percent + progress_increment);
-    // update_progress();
+    progress.percent = Math.min(100, progress.percent + progress_increment);
+    // console.log(progress.percent);
+    update_progress();
   }
 
   // initial generation
@@ -117,44 +117,74 @@ function create_simple_genealogy(
     return select_weighted(weighted_traits.items);
   }
 
-  for (var generation_index = 1; generation_index < generations_count; generation_index++) {
-    let ancestor_weighted_ids = calculate_parent_weighted_ids(ancestor_ids);
-    let child_ids = [];
-    for (var member_index = 0; member_index < population; member_index++) {
-      // create new node at new generation's level
-      let child_id = graph.add_node({});
-      child_ids.push(child_id)
-      graph.set_level(child_id, generation_index);
+  function fill_genealogy() {
 
-      // select parents for child
-      let parent_ids =
-        selected_multiple_weighted(
-          ancestor_weighted_ids,
-          parents_count,
-          replacement=false)
-        .map((parent_id) => parseInt(parent_id));
-      // parents generates trait for child
-      graph.get_node_metadata(child_id).trait = polysex(parent_ids);
-      let child_color = color_from_trait(graph.get_node_metadata(child_id).trait);
-      graph.get_node_metadata(child_id).fill = child_color;
+    function fill_generation(generation_index) {
+      return new Promise((resolve, reject) => {
 
-      // link parents to child
-      parent_ids.forEach((parent_id) => {
-        let parent_color = color_from_trait(graph.get_node_metadata(parent_id).trait);
-        graph.add_edge(parent_id, child_id, { stroke: parent_color })
+        let ancestor_weighted_ids = calculate_parent_weighted_ids(ancestor_ids);
+        let child_ids = [];
+        for (var member_index = 0; member_index < population; member_index++) {
+          // create new node at new generation's level
+          let child_id = graph.add_node({});
+          child_ids.push(child_id)
+          graph.set_level(child_id, generation_index);
+
+          // select parents for child
+          let parent_ids =
+            selected_multiple_weighted(
+              ancestor_weighted_ids,
+              parents_count,
+              replacement=false)
+            .map((parent_id) => parseInt(parent_id));
+          // parents generates trait for child
+          graph.get_node_metadata(child_id).trait = polysex(parent_ids);
+          let child_color = color_from_trait(graph.get_node_metadata(child_id).trait);
+          graph.get_node_metadata(child_id).fill = child_color;
+
+          // link parents to child
+          parent_ids.forEach((parent_id) => {
+            let parent_color = color_from_trait(graph.get_node_metadata(parent_id).trait);
+            graph.add_edge(parent_id, child_id, { stroke: parent_color })
+          });
+        }
+
+        if (allow_older_parents) {
+          // choose from all ancestors
+          ancestor_ids = ancestor_ids.concat(child_ids);
+        } else {
+          // choose only from immediately previous generation
+          ancestor_ids = child_ids;
+        }
+
+        resolve(null);
       });
     }
 
-    if (allow_older_parents) {
-      // choose from all ancestors
-      ancestor_ids = ancestor_ids.concat(child_ids);
-    } else {
-      // choose only from immediately previous generation
-      ancestor_ids = child_ids;
-    }
+    function iterate(i) {
+      return new Promise(function(resolve, reject) {
+        if (i < generations_count) {
+          fill_generation(i)
+            .then((_) => {
+              increment_progress();
+              resolve(iterate(i + 1));
+            })
+        } else {
+          resolve(null);
+        }
+      });
 
-    increment_progress();
+      // if (i < generations_count) {
+      //   fill_generation(i).then((_) => {
+      //     increment_progress();
+      //     iterate(i + 1);
+      //   });
+      // }
+    }
+    return iterate(1);
   }
 
-  return graph;
+  return new Promise((resolve, reject) => {
+    fill_genealogy().then((_) => resolve(graph));
+  });
 }

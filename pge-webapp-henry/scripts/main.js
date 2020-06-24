@@ -140,23 +140,24 @@ const genealogy_graph_layout = {
 function generate_genealogy() {
   load_configs();
 
-  genealogy = create_simple_genealogy(
-    genealogy_config.initial_distribution,
-    genealogy_config.fitness,
-    genealogy_config.parents_count,
-    genealogy_config.generations_count,
-    allow_older_parents=genealogy_config.allow_older_parents,
-    progress=genealogy_progress
-  );
-
-  simulate_graph(
-    genealogy,
-    "#graph_container",
-    genealogy_graph_layout.width,
-    genealogy_graph_layout.height,
-    link_strength=genealogy_config.link_strength,
-    show_graph=genealogy_config.show_graph);
-  calculate_gpe_result();
+  create_simple_genealogy(
+      genealogy_config.initial_distribution,
+      genealogy_config.fitness,
+      genealogy_config.parents_count,
+      genealogy_config.generations_count,
+      allow_older_parents = genealogy_config.allow_older_parents,
+      progress = genealogy_progress
+  ).then((genealogy_new) => {
+    genealogy = genealogy_new;
+    simulate_graph(
+      genealogy,
+      "#graph_container",
+      genealogy_graph_layout.width,
+      genealogy_graph_layout.height,
+      link_strength=genealogy_config.link_strength,
+      show_graph=genealogy_config.show_graph);
+    calculate_gpe_result();
+  });
 }
 
 //
