@@ -15,3 +15,7 @@ function set_hidden(id, is_hidden) {
     element.classList.remove("hidden");
   }
 }
+
+function hide(element) { element.classList.add("hidden"); }
+function unhide(element) { element.classList.remove("hidden"); }
+function toggle_hide(element) { element.classList.toggle("hidden"); }

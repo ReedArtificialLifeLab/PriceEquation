@@ -28,6 +28,7 @@ function add_genealogy_config_input(id) {
 }
 
 genealogy_config_defaults = {
+  trait_mode: "1b",
   initial_distribution_trait0: 2,
   initial_distribution_trait1: 2,
   fitness_trait0: 2,
@@ -49,8 +50,32 @@ for (var id in genealogy_config_defaults) {
     case "boolean":
       element.checked = value;
       break;
+    case "string":
+      element.value = value;
+      break;
   }
 }
+
+var trait_modes = ["1b", "2b"];
+var for_trait_modes = {};
+trait_modes.forEach((trait_mode) => {
+  for_trait_modes[trait_mode] = document.getElementsByClassName("for_trait_mode_"+trait_mode);
+});
+
+function update_trait_mode() {
+  let trait_mode = genealogy_config_inputs.trait_mode.value;
+  trait_modes.forEach((trait_mode_) => {
+    let elements = for_trait_modes[trait_mode_];
+    if (trait_mode == trait_mode_) {
+      for (var i = 0; i < elements.length; i++)
+      { unhide(elements[i]); }
+    } else {
+      for (var i = 0; i < elements.length; i++)
+      { hide(elements[i]); }
+    }
+  });
+}
+update_trait_mode();
 
 function load_genealogy_config() {
   genealogy_config.initial_distribution = [
@@ -95,6 +120,7 @@ function generate_gpe_config_inputs() {
     return
     gpe_config_inputs.measure_trait.remove();
   }
+  // TODO: implement option for trait_mode_2b
   let container = document.getElementById("input_measure_trait_container");
   let measure_trait = document.createElement("select");
   container.appendChild(measure_trait);

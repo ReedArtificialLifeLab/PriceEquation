@@ -17,14 +17,46 @@
           <th>Value</th>
         </tr>
         <tr>
+          <td>Trait Mode</td>
+          <td>
+            <select id="input_trait_mode" onchange="update_trait_mode()">
+              <option value="1b">1 boolean</option>
+              <option value="2b">2 booleans</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
           <td>
             Initial<br>Distribution
             <span class="tooltip">The number of members with each trait in the 0th generation.</span>
           </td>
           <td>
-            <table>
-              <tr><td>Red: <input type="number" id="input_initial_distribution_trait0" value="5"></td></tr>
-              <tr><td>Blue: <input type="number" id="input_initial_distribution_trait1" value="5"></td></tr>
+            <table class="for_trait_mode_1b">
+              <tr>
+                <th>Red</th>
+                <td><input type="number" id="input_initial_distribution_trait0" value="5"></td>
+              </tr>
+              <tr>
+                <th>Blue</th>
+                <td><input type="number" id="input_initial_distribution_trait1" value="5"></td>
+              </tr>
+            </table>
+            <table class="for_trait_mode_2b">
+              <tr>
+                <td style="border: none"></td>
+                <th>Circle</th>
+                <th>Triangle</th>
+              </tr>
+              <tr>
+                <th style="">Red</th>
+                <td><input type="number"></td>
+                <td><input type="number"></td>
+              </tr>
+              <tr>
+                <th>Blue</th>
+                <td><input type="number"></td>
+                <td><input type="number"></td>
+              </tr>
             </table>
           </td>
         </tr>
@@ -34,9 +66,32 @@
             <span class="tooltip">The relative fitnesses of each trait.</span>
           </td>
           <td>
-            <table>
-              <tr><td>Red: <input type="number" id="input_fitness_trait0" value="1"></td></tr>
-              <tr><td>Blue: <input type="number" id="input_fitness_trait1" value="1"></td></tr>
+            <table class="for_trait_mode_1b">
+              <tr>
+                <th>Red</th>
+                <td><input type="number" id="input_fitness_trait0" value="1"></td>
+              </tr>
+              <tr>
+                <th>Blue</th>
+                <td><input type="number" id="input_fitness_trait1" value="1"></td>
+              </tr>
+            </table>
+            <table class="for_trait_mode_2b">
+              <tr>
+                <td style="border: none"></td>
+                <th>Circle</th>
+                <th>Triangle</th>
+              </tr>
+              <tr>
+                <th>Red</th>
+                <td><input type="number"></td>
+                <td><input type="number"></td>
+              </tr>
+              <tr>
+                <th>Blue</th>
+                <td><input type="number"></td>
+                <td><input type="number"></td>
+              </tr>
             </table>
           </td>
         </tr>
