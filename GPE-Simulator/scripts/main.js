@@ -10,9 +10,6 @@ var genealogy_config_defaults = {};
 
 var genealogy = null;
 
-var gpe_config_inputs = {};
-var gpe_config = {};
-
 // gpe analysis
 
 var gpe_result_table = null;
@@ -29,30 +26,40 @@ function add_genealogy_config_input(id) {
 
 genealogy_config_defaults = {
   trait_mode: "1b",
+  //
   initial_distribution_trait0: 2,
   initial_distribution_trait1: 2,
-  fitness_trait0: 2,
-  fitness_trait1: 2,
+  initial_distribution_trait00: 1,
+  initial_distribution_trait01: 1,
+  initial_distribution_trait10: 1,
+  initial_distribution_trait11: 1,
+  //
+  fitness_trait0: 1,
+  fitness_trait1: 1,
+  fitness_trait00: 1,
+  fitness_trait01: 1,
+  fitness_trait10: 1,
+  fitness_trait11: 1,
+  //
   parentality: 2,
+  //
   generations: 2,
+  //
   allow_older_parents: false,
   edge_physics: false,
-  show_graph: true
+  show_graph: true,
+  //
+  measure_trait: null
 };
 
 for (var id in genealogy_config_defaults) {
   let value = genealogy_config_defaults[id];
   let element = add_genealogy_config_input(id)
   switch (typeof(value)) {
-    case "number":
-      element.value = value;
-      break;
-    case "boolean":
-      element.checked = value;
-      break;
-    case "string":
-      element.value = value;
-      break;
+    case "number"  : element.value   = value; break;
+    case "boolean" : element.checked = value; break;
+    case "string"  : element.value   = value; break;
+    case null      : break;
   }
 }
 
@@ -63,31 +70,65 @@ trait_modes.forEach((trait_mode) => {
 });
 
 function update_trait_mode() {
-  let trait_mode = genealogy_config_inputs.trait_mode.value;
+  // show/hide appropriate controls
+  genealogy_config.trait_mode = genealogy_config_inputs.trait_mode.value;
+  let trait_mode = genealogy_config.trait_mode;
   trait_modes.forEach((trait_mode_) => {
     let elements = for_trait_modes[trait_mode_];
-    if (trait_mode == trait_mode_) {
-      for (var i = 0; i < elements.length; i++)
-      { unhide(elements[i]); }
-    } else {
-      for (var i = 0; i < elements.length; i++)
-      { hide(elements[i]); }
-    }
+    if (trait_mode == trait_mode_)
+    { for (var i = 0; i < elements.length; i++) { unhide(elements[i]); } } else
+    { for (var i = 0; i < elements.length; i++) { hide(elements[i]); } }
+  });
+
+  // update measure_trait options
+  // clear old options
+  let measure_trait = genealogy_config_inputs.measure_trait;
+  while (measure_trait.children.length > 0)
+  { measure_trait.removeChild(measure_trait.children[0]); }
+  // chiise
+  switch (genealogy_config.trait_mode) {
+    case "1b" : traits = [[0], [1]];                       break;
+    case "2b" : traits = [[0, 0], [0, 1], [1, 0], [1, 1]]; break;
+    default   : traits = [[0], [1]];                       break;
+  }
+  traits.forEach((trait, index) => {
+    let option = document.createElement("option");
+    option.value = index;
+    option.innerText = represent_trait(trait).string;
+    measure_trait.appendChild(option);
   });
 }
-update_trait_mode();
 
 function load_genealogy_config() {
-  genealogy_config.initial_distribution = [
-    parseInt(genealogy_config_inputs.initial_distribution_trait0.value),
-    parseInt(genealogy_config_inputs.initial_distribution_trait0.value)
-  ];
+  // initial_distribution and fitness
 
-  let fitness_trait0 = parseInt(genealogy_config_inputs.fitness_trait0.value);
-  let fitness_trait1 = parseInt(genealogy_config_inputs.fitness_trait1.value);
-  genealogy_config.fitness = (trait) => {
-    if (trait == 0) { return fitness_trait0; } else
-    if (trait == 1) { return fitness_trait1; }
+  switch (genealogy_config.trait_mode) {
+    case "1b":
+      genealogy_config.initial_distribution = [
+        parseInt(genealogy_config_inputs.initial_distribution_trait0.value),
+        parseInt(genealogy_config_inputs.initial_distribution_trait0.value)
+      ];
+      let fitnesses_1b = [
+        parseInt(genealogy_config_inputs.fitness_trait0.value),
+        parseInt(genealogy_config_inputs.fitness_trait1.value)
+      ];
+      genealogy_config.fitness = (trait) => fitnesses_1b[trait_to_index(trait)];
+      break;
+    case "2b":
+      genealogy_config.initial_distribution = [
+        parseInt(genealogy_config_inputs.initial_distribution_trait00.value),
+        parseInt(genealogy_config_inputs.initial_distribution_trait01.value),
+        parseInt(genealogy_config_inputs.initial_distribution_trait10.value),
+        parseInt(genealogy_config_inputs.initial_distribution_trait11.value)
+      ];
+      let fitnesses_2b = [
+        parseInt(genealogy_config_inputs.fitness_trait00.value),
+        parseInt(genealogy_config_inputs.fitness_trait01.value),
+        parseInt(genealogy_config_inputs.fitness_trait10.value),
+        parseInt(genealogy_config_inputs.fitness_trait11.value)
+      ];
+      genealogy_config.fitness = (trait) => fitnesses_2b[trait_to_index(trait)];
+      break;
   }
 
   genealogy_config.parents_count = parseInt(genealogy_config_inputs.parentality.value);
@@ -96,57 +137,22 @@ function load_genealogy_config() {
 
   genealogy_config.allow_older_parents = genealogy_config_inputs.allow_older_parents.checked
 
-  if (genealogy_config_inputs.edge_physics.checked) {
-    genealogy_config.link_strength = 1;
-  } else {
-    genealogy_config.link_strength = 0;
-  }
+  genealogy_config.measure_trait = index_to_trait(genealogy_config_inputs.measure_trait.value, genealogy_config.initial_distribution.length);
+
+  genealogy_config.link_strength = genealogy_config_inputs.edge_physics.checked ? 1 : 0;
 
   genealogy_config.show_graph = genealogy_config_inputs.show_graph.checked;
+
+  genealogy_config.precision = 100000;
 }
 
-//
-// gpe config
-//
-
-gpe_config_inputs = {
-  measure_trait: null,
-  precision: null
-};
-
-function generate_gpe_config_inputs() {
-  if (gpe_config_inputs.measure_trait !== null) {
-    // TODO: actually need to check for dynamic update of traits if there are other possibilities, but for now just 2 statically
-    return
-    gpe_config_inputs.measure_trait.remove();
-  }
-  // TODO: implement option for trait_mode_2b
-  let container = document.getElementById("input_measure_trait_container");
-  let measure_trait = document.createElement("select");
-  container.appendChild(measure_trait);
-  gpe_config_inputs.measure_trait = measure_trait;
-  traits = [0, 1];
-  traits.forEach((trait) => {
-    let option = document.createElement("option");
-    option.value = trait;
-    option.innerText = color_from_trait(trait);
-    measure_trait.appendChild(option);
-  });
+function update_config_inputs() {
+  update_trait_mode();
 }
-generate_gpe_config_inputs();
-
-function load_gpe_config() {
-  gpe_config = {
-    trait: parseInt(gpe_config_inputs.measure_trait.value),
-    precision: 100000
-  };
-}
+update_config_inputs();
 
 function load_configs() {
   load_genealogy_config();
-  load_gpe_config();
-
-  generate_gpe_config_inputs();
 }
 
 //
@@ -166,6 +172,7 @@ const genealogy_graph_layout = {
 function generate_genealogy() {
   load_configs();
 
+  // create genealogy
   create_simple_genealogy(
       genealogy_config.initial_distribution,
       genealogy_config.fitness,
@@ -173,7 +180,9 @@ function generate_genealogy() {
       genealogy_config.generations_count,
       allow_older_parents = genealogy_config.allow_older_parents,
       progress = genealogy_progress
-  ).then((genealogy_new) => {
+  ).then((genealogy_new) =>
+  // calculate gpe result
+  {
     genealogy = genealogy_new;
     simulate_graph(
       genealogy,
@@ -207,7 +216,7 @@ gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^*_d, X_d)\\)", "cov_Cti
 gpe_result_table.add_column("error", "error");
 
 function parse_gpe_result(x) {
-  return Math.round(parseFloat(x) * gpe_config.precision) / gpe_config.precision;
+  return Math.round(parseFloat(x) * genealogy_config.precision) / genealogy_config.precision;
 }
 
 function update_gpe_result_outputs() {
@@ -217,7 +226,7 @@ function update_gpe_result_outputs() {
       ancestor_level < genealogy_config.generations_count - 1;
       ancestor_level++)
   {
-    let gpe_analysis = new GPE_Analysis(genealogy, gpe_config.trait, ancestor_level);
+    let gpe_analysis = new GPE_Analysis(genealogy, genealogy_config.measure_trait, ancestor_level);
     let covt_a = gpe_analysis.cov_Ctil_X_ancestors();
     let ave_DX = gpe_analysis.ave_DX();
     let covt_d = gpe_analysis.cov_Ctil_X_descendants();
@@ -269,6 +278,13 @@ function calculate_gpe_result() {
 window.onload = () => {
   generate_genealogy();
 };
+
+window.addEventListener("keypress", (e) => {
+  if (e.key === " ") {
+    e.preventDefault();
+    generate_genealogy();
+  }
+})
 
 /*
 window.onload = () => {

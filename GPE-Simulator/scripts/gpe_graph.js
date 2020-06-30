@@ -74,8 +74,8 @@ function update_gpe_graph() {
       y: ys.Xbar_ancestors,
       type: "scatter",
       fill: "tonexty",
-      fillcolor: color_from_trait(gpe_config.trait),
-      line: { color: color_from_trait(gpe_config.trait) }
+      fillcolor: represent_trait(genealogy_config.measure_trait).color,
+      line: { color: represent_trait(genealogy_config.measure_trait).color }
     },
     DXbar: {
       name: "DXbar",

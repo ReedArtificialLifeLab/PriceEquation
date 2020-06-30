@@ -61,7 +61,7 @@ class GPE_Analysis {
 
   // tests whether node has this.trait
   X(node_id) {
-    if (this.genealogy.get_node_metadata(node_id).trait == this.trait)
+    if (trait_equal(this.genealogy.get_node_metadata(node_id).trait, this.trait))
     { return 1; }
     else
     { return 0; }
@@ -73,7 +73,7 @@ class GPE_Analysis {
     let total = 0;
     let node_ids = this.genealogy.get_level_node_ids(level);
     node_ids.forEach((node_id) => {
-      if (this.genealogy.get_node_metadata(node_id).trait == this.trait)
+      if (trait_equal(this.genealogy.get_node_metadata(node_id).trait, this.trait))
       { total += 1; }
     });
     return total/node_ids.length;

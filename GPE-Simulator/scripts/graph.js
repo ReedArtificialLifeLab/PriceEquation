@@ -111,6 +111,8 @@ class Graph {
   }
 
   get_node_metadata(node_id) {
+    // let node = this.get_node(node_id);
+    // if (node == undefined) { console.log(node_id); }
     return this.get_node(node_id).metadata;
   }
 
@@ -253,6 +255,15 @@ function graph_from_json(json) {
   return graph;
 }
 
+const triangle_size = 6;
+function triangle_points(d) {
+  let s = triangle_size;
+  let p1 = (d.x - s)+","+(d.y + s);
+  let p2 = (d.x + 0)+","+(d.y - s);
+  let p3 = (d.x + s)+","+(d.y + s);
+  return p1+" "+p2+" "+p3;
+}
+
 var svg = null;
 
 function simulate_graph(
@@ -324,10 +335,11 @@ function simulate_graph(
   // tick
 
   function tick_edges() {
-    let u = svg.selectAll("line").data(edges);
+    let u = svg.selectAll(".edge").data(edges);
     u.enter()
       .append("line")
       .merge(u)
+      .attr("class", ".edge")
       .attr("x1", (d) => d.source.x)
       .attr("y1", (d) => d.source.y)
       .attr("x2", (d) => d.target.x)
@@ -338,10 +350,17 @@ function simulate_graph(
 
   function tick_nodes() {
     let u = svg.selectAll("circle").data(nodes);
-    u.enter()
+    u.enter().filter((d) => d.metadata.shape == "circle")
       .append("circle")
       .merge(u)
       .attr("r", 5)
+      .attr("cx", (d) => d.x)
+      .attr("cy", (d) => d.y)
+      .attr("fill", (d) => d.metadata.fill);
+    u.enter().filter((d) => d.metadata.shape == "triangle")
+      .append("polygon")
+      .merge(u)
+      .attr("points", triangle_points)
       .attr("cx", (d) => d.x)
       .attr("cy", (d) => d.y)
       .attr("fill", (d) => d.metadata.fill);

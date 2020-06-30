@@ -19,7 +19,7 @@
         <tr>
           <td>Trait Mode</td>
           <td>
-            <select id="input_trait_mode" onchange="update_trait_mode()">
+            <select id="input_trait_mode" onchange="update_config_inputs();">
               <option value="1b">1 boolean</option>
               <option value="2b">2 booleans</option>
             </select>
@@ -49,13 +49,13 @@
               </tr>
               <tr>
                 <th style="">Red</th>
-                <td><input type="number" value="2"></td>
-                <td><input type="number" value="2"></td>
+                <td><input type="number" id="input_initial_distribution_trait00" value="1"></td>
+                <td><input type="number" id="input_initial_distribution_trait01" value="1"></td>
               </tr>
               <tr>
                 <th>Blue</th>
-                <td><input type="number" value="2"></td>
-                <td><input type="number" value="2"></td>
+                <td><input type="number" id="input_initial_distribution_trait10" value="1"></td>
+                <td><input type="number" id="input_initial_distribution_trait11" value="1"></td>
               </tr>
             </table>
           </td>
@@ -84,13 +84,13 @@
               </tr>
               <tr>
                 <th>Red</th>
-                <td><input type="number" value="1"></td>
-                <td><input type="number" value="1"></td>
+                <td><input type="number" id="input_fitness_trait00" value="1"></td>
+                <td><input type="number" id="input_fitness_trait01" value="1"></td>
               </tr>
               <tr>
                 <th>Blue</th>
-                <td><input type="number" value="1"></td>
-                <td><input type="number" value="1"></td>
+                <td><input type="number" id="input_fitness_trait10" value="1"></td>
+                <td><input type="number" id="input_fitness_trait11" value="1"></td>
               </tr>
             </table>
           </td>
@@ -121,7 +121,7 @@
             Measure Trait
             <span class="tooltip">The trait to measure GPE results for.</span>
           </td>
-          <td id="input_measure_trait_container"></td>
+          <td><select id="input_measure_trait"></select></td>
         </tr>
         <tr>
           <td>
