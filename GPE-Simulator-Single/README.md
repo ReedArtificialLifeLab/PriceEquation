@@ -1,4 +1,4 @@
-# PGE Web App (Henry)
+# GPE Simulator (Single)
 
 A web app for visualizing the generalized price equation (GPE) statistics for simple, randomly-generated genealogies.
 
