@@ -1,0 +1,147 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  padding: 10px;
+
+  font_family: menlo;
+}
+
+#config_container {
+  vertical_align: top;
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+#config_table {
+  vertical-align: top;
+}
+
+#genealogy_graph_container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#graph_container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#gpe_table_container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#gpe_graph_container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.gpe_graph {
+  vertical-align: top;
+  /* display: inline-block; */
+}
+
+h2 {
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid black;
+}
+
+th {
+  background: black;
+  color: white;
+  border: none;
+  border-left: 4px solid white;
+  border-right: 4px solid white;
+  padding: 5px;
+  font-size: 10pt;
+}
+
+td {
+  padding: 5px;
+}
+
+input {
+  font-family: menlo;
+  font-size: 10pt;
+}
+
+input[type="number"] {
+  width: 50px;
+}
+
+#gpe_table_container {
+  overflow-y: scroll;
+  max-height: 500px;
+}
+
+#button_generate_genealogy {
+  margin: auto;
+  margin-top: 0px;
+  margin-bottom: 0;
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 10pt;
+  font-family: menlo;
+}
+
+.output {
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+  /* border: 1px solid red; */
+  height: 0;
+  width: 0;
+}
+
+#progress_container_generate_genealogy {
+  display: none;
+  visibility: hidden;
+}
+
+.progress_container {
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 0 0 2px black inset;
+}
+
+.progress_bar {
+  width: 0%;
+  height: 10px;
+  background-color: black;
+}
+
+
+/*  */
+/*  */
+/*  */
+
+td:hover > span.tooltip {
+  display: block;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  border: 2px dashed black;
+  background-color: grey;
+  color: lime;
+  padding: 5px;
+  max-width: 300px;
+  font-size: 10pt;
+  z-index: 10;
+}
