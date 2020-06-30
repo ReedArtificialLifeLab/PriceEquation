@@ -271,9 +271,19 @@ function calculate_gpe_result() {
 // run
 //
 
-window.onload = () => {
-  generate_genealogy();
-};
+
+function when_available(name, callback) {
+  let interval = 10; // ms
+  let interval_id = setInterval(() => {
+    if (window[name] !== undefined) {
+      clearInterval(interval_id);
+      callback();
+    }
+  }, interval);
+}
+
+when_available("Plotly", () => generate_genealogy());
+
 
 window.addEventListener("keypress", (e) => {
   if (e.key === " ") {
