@@ -151,16 +151,11 @@ function create_simple_genealogy(
 
   function polysex(parent_ids) {
     let weighted_traits = new DefaultDictionary(() => 0);
-    console.log("parent traits");
     parent_ids.forEach((parent_id) => {
       let parent_trait = graph.get_node_metadata(parent_id).trait
       let parent_trait_index = trait_to_index(parent_trait);
-      console.log(parent_trait_index, parent_trait);
       weighted_traits.modify(parent_trait_index, (x) => x + 1/parent_ids.length);
     });
-    console.log("weighted traits");
-    console.log(weighted_traits.items);
-    console.log("----------------------------------------");
     return index_to_trait(select_weighted(weighted_traits.items), trait_count);
   }
 

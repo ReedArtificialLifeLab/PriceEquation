@@ -213,8 +213,6 @@ gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^a_*, X^a)\\)", "cov_Cti
 gpe_result_table.add_column("\\(\\textit{ave}(\\Delta X)\\)", "ave_DX");
 gpe_result_table.add_column("\\(\\textit{cov}(\\tilde{C}^*_d, X_d)\\)", "cov_Ctil_X_descendants");
 
-gpe_result_table.add_column("error", "error");
-
 function parse_gpe_result(x) {
   return Math.round(parseFloat(x) * genealogy_config.precision) / genealogy_config.precision;
 }
@@ -231,7 +229,6 @@ function update_gpe_result_outputs() {
     let ave_DX = gpe_analysis.ave_DX();
     let covt_d = gpe_analysis.cov_Ctil_X_descendants();
     let DXbar = gpe_analysis.DXbar_simple();
-    let error = DXbar - (covt_a + ave_DX - covt_d);
     gpe_result_table.add_row([
       ancestor_level+"→"+(ancestor_level+1),
       parse_gpe_result(gpe_analysis.Xbar_ancestors()),
@@ -239,8 +236,7 @@ function update_gpe_result_outputs() {
       parse_gpe_result(DXbar),
       parse_gpe_result(covt_a),
       parse_gpe_result(ave_DX),
-      parse_gpe_result(covt_d),
-      parse_gpe_result(error)
+      parse_gpe_result(covt_d)
     ]);
   }
 
