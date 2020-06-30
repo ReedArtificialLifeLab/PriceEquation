@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <body>
-    <h1>GPE Simulator</h1>
+    <h1>GPE Simulator (Batch)</h1>
 
     <hr>
 
@@ -124,56 +124,18 @@
           <td><select id="input_measure_trait"></select></td>
         </tr>
         <tr>
-          <td>
-            Edge Physics
-            <span class="tooltip"><b>True:</b>edges between members will attract them in the visualization, although members are still coerced into generation levels.<br><b>False:</b> members are placed evenly-spaced in their generation level without regard for their closeness to edges between parents/children.</span>
-          </td>
-          <td><input type="checkbox" id="input_edge_physics"></td>
-        </tr>
-        <tr>
-          <td>
-            Show Network
-            <span class="tooltip"><b>True:</b> Genealogy network visualization is generated and displayed (slow for large number of generations and members).<br><b>False:</b> Genealogy network visualization is neither generated nor displayed (fast for large numbers of generations and members).</span>
-          </td>
-          <td><input type="checkbox" id="input_show_graph" checked
-            onchange="set_hidden('genealogy_graph_container', !event.target.checked)"></td>
-        </tr>
-        <tr>
-          <td>
-            Show GPE Table
-            <span class="tooltip">Show or hide GPE result table. This does not affect performance, as the calculations are still performed and displaying text is negligably complex.</span>
-          </td>
-          <td><input type="checkbox" checked
-            onchange="set_hidden('gpe_table_container', !event.target.checked)"></td>
-        </tr>
-        <tr>
-          <td>
-            Show GPE Graphs
-            <span class="tooltip">Show or hide GPE result graphs. This may slightly affect performance, but is typically negligable.</span>
-          </td>
-          <td><input type="checkbox" checked
-            onchange="set_hidden('gpe_graph_container', !event.target.checked)"></td>
+          <td>Batch Size</td>
+          <td><input type="number" id="input_batch_size" value="10"></td>
         </tr>
         <!-- <tr>
           <td>...</td>
-          <td><input type="checkbox" id="input-..." value="_"></td>
+          <td><input type="checkbox" id="input_..." value="_"></td>
         </tr> -->
       </table>
       <br>
-      <button type="button" id="button_generate_genealogy" onclick="generate_genealogy()">generate genealogy</button>
-      <div id="progress_container_generate_genealogy" class="progress_container">
-        <div id="progress_bar_generate_genealogy" class="progress_bar"></div>
-      </div>
+      <button type="button" id="button_simulate_batch" onclick="simulate_batch()">simulate batch</button>
     </div>
     <!--  -->
-    <div id="genealogy_graph_container">
-      <!-- <h2>Genealogy Graph</h2> -->
-      <div id="graph_container"></div>
-    </div>
-    <!--  -->
-    <div id="gpe_table_container">
-      <!-- <h2>GPE Results Table</h2> -->
-    </div>
     <div id="gpe_graph_container">
       <!-- <h2>GPE Results Graphs</h2> -->
       <div>
@@ -185,7 +147,7 @@
   </body>
   <head>
     <meta charset="utf-8">
-    <title>GPE Simulator</title>
+    <title>GPE Simulator (Batch)</title>
     <!-- styles -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/graph.css">
@@ -193,14 +155,13 @@
     <!-- mathjax -->
     <!-- <script type="text/javascript"
       src="scripts/es6.js" charset="utf-8"></script> -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
 
     <!-- local scripts -->
     <script type="text/javascript" src="scripts/d3.min.js" async></script>
     <script type="text/javascript" src="scripts/plotly.min.js" async></script>
     <script type="text/javascript" src="scripts/utilities.js"></script>
-    <script type="text/javascript" src="scripts/dynamic_table.js"></script>
     <script type="text/javascript" src="scripts/graph.js"></script>
     <script type="text/javascript" src="scripts/genealogy.js"></script>
     <script type="text/javascript" src="scripts/gpe.js"></script>

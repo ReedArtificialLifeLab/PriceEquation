@@ -45,33 +45,13 @@ function trait_equal(trait1, trait2) {
 // fitness : traits -> fitness score
 // parents_count : number of parents each node has
 // generations_count : number of generations_count
-// progress : { container:element, bar:element }
 function create_simple_genealogy(
   initial_distribution, fitness, parents_count, generations_count,
-  allow_older_parents=false,
-  progress=null)
+  allow_older_parents=false)
 {
   let graph = new Graph();
   let trait_count = initial_distribution.length;
   let ancestor_ids = [];
-
-  //
-  // progress
-  // TODO: this doesn't work... probably because its during the execution of a function
-  //
-
-  progress.percent = 0;
-  let progress_increment = 100/generations_count;
-
-  function update_progress() {
-    progress.bar.style.width = Math.round(progress.percent).toString() + "%";
-  }
-  update_progress();
-
-  function increment_progress() {
-    progress.percent = Math.min(100, progress.percent + progress_increment);
-    update_progress();
-  }
 
   //
   // initial generation
@@ -89,7 +69,6 @@ function create_simple_genealogy(
       ancestor_ids.push(node_id);
     }
   });
-  increment_progress();
 
   //
   // evolution functions
@@ -204,30 +183,8 @@ function create_simple_genealogy(
       });
     }
 
-    function iterate(i) {
-      return new Promise(function(resolve, reject) {
-        if (i < generations_count) {
-          fill_generation(i)
-            .then((_) => {
-              increment_progress();
-              resolve(iterate(i + 1));
-            })
-        } else {
-          resolve(null);
-        }
-      });
-
-      // if (i < generations_count) {
-      //   fill_generation(i).then((_) => {
-      //     increment_progress();
-      //     iterate(i + 1);
-      //   });
-      // }
-    }
-    return iterate(1);
+    for (var i = 0; i < generations_count; i++) { fill_generation(i) }
   }
 
-  return new Promise((resolve, reject) => {
-    fill_genealogy().then((_) => resolve(graph));
-  });
+  return graph;
 }

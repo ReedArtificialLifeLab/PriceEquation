@@ -32,6 +32,8 @@ function update_gpe_graph() {
 
   function add_result(result_key, gen_index) {
     xs[result_key].push(gen_index);
+    ys[result_key].push(gpe_result);
+
     ys[result_key].push(gpe_result_table.get_entry(result_key, gen_index));
   }
 
