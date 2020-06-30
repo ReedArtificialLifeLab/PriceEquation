@@ -3,7 +3,7 @@
 A web app for visualizing the generalized price equation (GPE) statistics for simple, randomly-generated genealogies.
 
 ## Usage
-
+w
 ### Setup
 
 **Recommended:** Run an HTTP server this repository's parent directory. Then open a web browser to `index.html`.
