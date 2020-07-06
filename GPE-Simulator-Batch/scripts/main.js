@@ -46,7 +46,7 @@ config_defaults = {
   //
   measure_trait: null,
   //
-  batch_size: 10
+  batch_size: 2
 };
 
 for (var id in config_defaults) {
@@ -56,7 +56,7 @@ for (var id in config_defaults) {
     case "number"  : element.value   = value; break;
     case "boolean" : element.checked = value; break;
     case "string"  : element.value   = value; break;
-    case null      : break;
+    default : break;
   }
 }
 
@@ -155,13 +155,14 @@ update_config_inputs();
 // gpe calculations
 //
 
-const gpe_result_keys = ["Xbar_ancestors", "Xbar_descendants", "DXbar", "cov_Ctil_X_ancestors", "ave_DX", "cov_Ctil_X_ancestors"];
+const gpe_result_keys = ["Xbar_ancestors", "Xbar_descendants", "DXbar", "cov_Ctil_X_ancestors", "ave_DX", "cov_Ctil_X_descendants"];
 
 function add_gpe_single_result(gpe_single_result) {
   gpe_result_keys.forEach(key => {
     let generations = gpe_batch_results[key];
-    for (var i = 0; i < config.generations_count; i++)
-    { generations[i].push(gpe_single_result[key]); }
+    for (var i = 0; i < config.generations_count - 1; i++)
+    { generations[i].push(gpe_single_result[key][i]); }
+    // gpe_batch_results[key][i] = gpe_single_result[key]
   });
 }
 
@@ -169,7 +170,7 @@ function reset_gpe_batch_results() {
   gpe_batch_results = {};
   gpe_result_keys.forEach(key => {
     let generations = [];
-    for (var i = 0; i < config.generations_count; i++)
+    for (var i = 0; i < config.generations_count - 1; i++)
     { generations.push([]); }
     gpe_batch_results[key] = generations;
   })
@@ -182,7 +183,6 @@ function init_gpe_single_result() {
 }
 
 function add_gpe_generation_result(gpe_single_result, gpe_generation_result) {
-  console.log(gpe_generation_result);
   gpe_result_keys.forEach(key => gpe_single_result[key].push(gpe_generation_result[key]));
 }
 
@@ -207,7 +207,6 @@ function calculate_gpe_single_result(genealogy) {
       "cov_Ctil_X_ancestors": gpe_analysis.cov_Ctil_X_descendants()
     });
   }
-  console.log(gpe_single_result);
   return gpe_single_result;
 }
 
@@ -235,10 +234,8 @@ function simulate_batch() {
     let gpe_single_result = calculate_gpe_single_result(genealogy);
     add_gpe_single_result(gpe_single_result);
   }
-
-  console.log(gpe_batch_results)
-
-  // TODO: aggregate gpe_results and graph them
+  console.log("gpe_batch_results", gpe_batch_results);
+  plot_gpe_batch_results(gpe_batch_results);
 }
 
 

@@ -14,6 +14,18 @@ const gpe_graph_colors = {
   DXbar: "orange",
 };
 
+function plot_gpe_batch_results(gpe_batch_results) {
+  let result_keys = [
+    "cov_Ctil_X_ancestors",
+    "ave_DX",
+    "cov_Ctil_X_descendants",
+    "Xbar_ancestors",
+    "DXbar"
+  ];
+
+  // TODO: plot with error bars and whatnot
+}
+
 function update_gpe_graph() {
   let result_keys = [
     "cov_Ctil_X_ancestors",

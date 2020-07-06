@@ -52,7 +52,6 @@ function create_simple_genealogy(
   allow_older_parents=false)
 {
   let graph = new Graph();
-  let trait_count = initial_distribution.length;
   let ancestor_ids = [];
 
   //
@@ -145,58 +144,53 @@ function create_simple_genealogy(
       else
       { child_trait.push(1); }
     }
-    console.log("child trait", child_trait);
     return child_trait;
   }
 
   function fill_genealogy() {
 
     function fill_generation(generation_index) {
-      return new Promise((resolve, reject) => {
+      let ancestor_weighted_ids = calculate_parent_weighted_ids(ancestor_ids);
+      let child_ids = [];
+      for (var member_index = 0; member_index < population; member_index++) {
+        // create new node at new generation's level
+        let child_id = graph.add_node();
+        child_ids.push(child_id)
+        graph.set_level(child_id, generation_index);
 
-        let ancestor_weighted_ids = calculate_parent_weighted_ids(ancestor_ids);
-        let child_ids = [];
-        for (var member_index = 0; member_index < population; member_index++) {
-          // create new node at new generation's level
-          let child_id = graph.add_node();
-          child_ids.push(child_id)
-          graph.set_level(child_id, generation_index);
+        // select parents for child
+        let parent_ids =
+          selected_multiple_weighted(
+            ancestor_weighted_ids,
+            parents_count,
+            replacement=false)
+          .map((parent_id) => parseInt(parent_id));
+        // parents generates trait for child,
+        // each component chosen from a random parent
+        let child_trait = polysex(parent_ids);
+        graph.get_node_metadata(child_id).trait = child_trait;
+        graph.get_node_metadata(child_id).fill = represent_trait(child_trait).color;
+        graph.get_node_metadata(child_id).shape = represent_trait(child_trait).shape;
 
-          // select parents for child
-          let parent_ids =
-            selected_multiple_weighted(
-              ancestor_weighted_ids,
-              parents_count,
-              replacement=false)
-            .map((parent_id) => parseInt(parent_id));
-          // parents generates trait for child,
-          // each component chosen from a random parent
-          let child_trait = polysex(parent_ids);
-          graph.get_node_metadata(child_id).trait = child_trait;
-          graph.get_node_metadata(child_id).fill = represent_trait(child_trait).color;
-          graph.get_node_metadata(child_id).shape = represent_trait(child_trait).shape;
+        // link parents to child
+        parent_ids.forEach((parent_id) => {
+          let parent_color = represent_trait(graph.get_node_metadata(parent_id).trait).color;
+          graph.add_edge(parent_id, child_id, { stroke: parent_color })
+        });
+      }
 
-          // link parents to child
-          parent_ids.forEach((parent_id) => {
-            let parent_color = represent_trait(graph.get_node_metadata(parent_id).trait).color;
-            graph.add_edge(parent_id, child_id, { stroke: parent_color })
-          });
-        }
-
-        if (allow_older_parents) {
-          // choose from all ancestors
-          ancestor_ids = ancestor_ids.concat(child_ids);
-        } else {
-          // choose only from immediately previous generation
-          ancestor_ids = child_ids;
-        }
-
-        resolve(null);
-      });
+      if (allow_older_parents) {
+        // choose from all ancestors
+        ancestor_ids = ancestor_ids.concat(child_ids);
+      } else {
+        // choose only from immediately previous generation
+        ancestor_ids = child_ids;
+      }
     }
 
     for (var i = 0; i < generations_count; i++) { fill_generation(i) }
   }
 
+  fill_genealogy();
   return graph;
 }
