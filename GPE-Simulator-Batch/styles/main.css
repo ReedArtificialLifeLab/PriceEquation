@@ -26,19 +26,18 @@ html, body {
   vertical-align: top;
 }
 
-#gpe_table_container {
+#gpe_results_graph_container {
   display: inline-block;
   vertical-align: top;
 }
 
-#gpe_graph_container {
-  display: inline-block;
-  vertical-align: top;
+#gpe_results_graph_container > div {
+  display: block;
 }
 
-.gpe_graph {
+.gpe_results_graph {
   vertical-align: top;
-  /* display: inline-block; */
+  display: inline-block;
 }
 
 h2 {
@@ -82,6 +81,23 @@ input[type="number"] {
 }
 
 #button_simulate_batch {
+  display: block;
+  margin: auto;
+  margin-top: 0px;
+  margin-bottom: 0;
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 10pt;
+  font-family: menlo;
+}
+
+#status_simulate_batch {
+  display: block;
   margin: auto;
   margin-top: 0px;
   margin-bottom: 0;

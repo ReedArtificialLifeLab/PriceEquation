@@ -41,12 +41,12 @@ config_defaults = {
   fitness_trait11: 1,
   //
   parentality: 2,
-  generations: 2,
+  generations: 5,
   allow_older_parents: false,
   //
   measure_trait: null,
   //
-  batch_size: 2
+  batch_size: 10
 };
 
 for (var id in config_defaults) {
@@ -82,15 +82,15 @@ function update_trait_mode() {
   let measure_trait = config_inputs.measure_trait;
   while (measure_trait.children.length > 0)
   { measure_trait.removeChild(measure_trait.children[0]); }
-  // chiise
+  // choose
   switch (config.trait_mode) {
-    case "1b" : traits = [[0], [1]];                       break;
+    case "1b" : traits = [[0, 0], [1, 0]];                 break;
     case "2b" : traits = [[0, 0], [0, 1], [1, 0], [1, 1]]; break;
-    default   : traits = [[0], [1]];                       break;
+    default   : traits = [[0, 0], [1, 0]];                 break;
   }
   traits.forEach((trait, index) => {
     let option = document.createElement("option");
-    option.value = index;
+    option.value = trait_to_index(trait);
     option.innerText = represent_trait(trait).string;
     measure_trait.appendChild(option);
   });
@@ -104,7 +104,7 @@ function load_config() {
       config.initial_distribution = [
         parseInt(config_inputs.initial_distribution_trait0.value),
         0,
-        parseInt(config_inputs.initial_distribution_trait0.value),
+        parseInt(config_inputs.initial_distribution_trait1.value),
         0
       ];
       let fitnesses_1b = [
@@ -222,8 +222,82 @@ var progress_batch = {
 }
 
 function simulate_batch() {
+  // TODO: asyn progress not working...
+  // (new Promise(function(resolve, reject) {
+  //   set_hidden("button_simulate_batch", true);
+  //   set_hidden("status_simulate_batch", false);
+  //   resolve(null);
+  // })).then((_) => {
+  //   load_config();
+  //   reset_gpe_batch_results();
+  //
+  //   let promise_batch = [];
+  //   for (var i = 0; i < config.batch_size; i++) {
+  //     promise_batch.push(new Promise(function(resolve, reject) {
+  //       let genealogy = create_simple_genealogy(
+  //         config.initial_distribution,
+  //         config.fitness,
+  //         config.parents_count,
+  //         config.generations_count,
+  //         allow_older_parents = config.allow_older_parents);
+  //       let gpe_single_result = calculate_gpe_single_result(genealogy);
+  //       add_gpe_single_result(gpe_single_result);
+  //       resolve(null)
+  //     }));
+  //   }
+  //
+  //   document.getElementById("output_simulate_batch").innerText = "";
+  //   function update_progress(x) {
+  //     console.log("finished another");
+  //     document.getElementById("output_simulate_batch").innerText += "+";
+  //   }
+  //   promise_batch.reduce((prev, curr) => {
+  //     return prev.then(update_progress).then(curr);
+  //   });
+  //
+  //   // promise_batch.forEach((p, i) => p.then((_) => {
+  //   //   console.log("finished", i);
+  //   //   document.getElementById("output_simulate_batch").innerText += i;
+  //   // }));
+  //
+  //   Promise.all(promise_batch).then((_) => {
+  //     console.log("gpe_batch_results", gpe_batch_results);
+  //     plot_gpe_batch_results(gpe_batch_results);
+  //
+  //     set_hidden("button_simulate_batch", false);
+  //     set_hidden("status_simulate_batch", true);
+  //   });
+  // });
+
+
   load_config();
   reset_gpe_batch_results();
+
+  let promise_batch = [];
+  for (var i = 0; i < config.batch_size; i++) {
+    promise_batch.push(new Promise(function(resolve, reject) {
+      let genealogy = create_simple_genealogy(
+        config.initial_distribution,
+        config.fitness,
+        config.parents_count,
+        config.generations_count,
+        allow_older_parents = config.allow_older_parents);
+      let gpe_single_result = calculate_gpe_single_result(genealogy);
+      add_gpe_single_result(gpe_single_result);
+      resolve(null)
+    }));
+  }
+
+  Promise.all(promise_batch).then((_) => {
+    console.log("gpe_batch_results", gpe_batch_results);
+    plot_gpe_batch_results(gpe_batch_results);
+
+    set_hidden("button_simulate_batch", false);
+    set_hidden("status_simulate_batch", true);
+  });
+
+  plot_gpe_batch_results(gpe_batch_results);
+
   for (var i = 0; i < config.batch_size; i++) {
     let genealogy = create_simple_genealogy(
       config.initial_distribution,
@@ -236,13 +310,15 @@ function simulate_batch() {
   }
   console.log("gpe_batch_results", gpe_batch_results);
   plot_gpe_batch_results(gpe_batch_results);
+
+  set_hidden("button_simulate_batch", true);
+  set_hidden("status_simulate_batch", false);
 }
 
 
 //
 // run
 //
-
 
 // function when_available(name, callback) {
 //   let interval = 10; // ms
@@ -255,7 +331,6 @@ function simulate_batch() {
 // }
 //
 // when_available("Plotly", () => simulate_batch());
-
 
 // window.addEventListener("keypress", (e) => {
 //   if (e.key === " ") {

@@ -107,7 +107,7 @@ function load_genealogy_config() {
       genealogy_config.initial_distribution = [
         parseInt(genealogy_config_inputs.initial_distribution_trait0.value),
         0,
-        parseInt(genealogy_config_inputs.initial_distribution_trait0.value),
+        parseInt(genealogy_config_inputs.initial_distribution_trait1.value),
         0
       ];
       let fitnesses_1b = [

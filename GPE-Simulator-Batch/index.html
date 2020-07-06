@@ -17,7 +17,10 @@
           <th>Value</th>
         </tr>
         <tr>
-          <td>Trait Mode</td>
+          <td>
+            Trait Mode
+            <span class="tooltip">The kind of traits that members in the genealogy have.</span>
+          </td>
           <td>
             <select id="input_trait_mode" onchange="update_config_inputs();">
               <option value="1b">1 boolean</option>
@@ -97,6 +100,42 @@
         </tr>
         <tr>
           <td>
+            Parentalities
+            <span class="tooltip">The relative parentalities of each trait.</span>
+          </td>
+          <td>TODO</td>
+          <!-- <td>
+            <table class="for_trait_mode_1b">
+              <tr>
+                <th>Red</th>
+                <td><input type="number" id="input_parentality_trait0" value="1"></td>
+              </tr>
+              <tr>
+                <th>Blue</th>
+                <td><input type="number" id="input_parentality_trait1" value="1"></td>
+              </tr>
+            </table>
+            <table class="for_trait_mode_2b">
+              <tr>
+                <td style="border: none"></td>
+                <th>Circle</th>
+                <th>Triangle</th>
+              </tr>
+              <tr>
+                <th>Red</th>
+                <td><input type="number" id="input_parentality_trait00" value="1"></td>
+                <td><input type="number" id="input_parentality_trait01" value="1"></td>
+              </tr>
+              <tr>
+                <th>Blue</th>
+                <td><input type="number" id="input_parentality_trait10" value="1"></td>
+                <td><input type="number" id="input_parentality_trait11" value="1"></td>
+              </tr>
+            </table>
+          </td> -->
+        </tr>
+        <tr>
+          <td>
             Parentality
             <span class="tooltip">The number of parents that each member has. A member's trait is determined by a polysex function of it's parents' traits.</span>
           </td>
@@ -109,12 +148,20 @@
           </td>
           <td><input type="number" id="input_generations" value="5"></td>
         </tr>
-        <tr>
+        <tr class="hidden">
           <td>
             Older Parents
             <span class="tooltip"><b>True:</b> members choose parents from the entire ancestry.<br><b>False:</b> members choose parents only from the immediately previous generation.</span>
           </td>
           <td><input type="checkbox" id="input_allow_older_parents"></td>
+        </tr>
+        <tr>
+          <td>
+            Age Factor
+            <span class="tooltip">modifies the percieved fitness of an ancestor as a factor of how many generations previous it is to the currect generation.</span>
+          </td>
+          <!-- <td><input type="number" id="input_age_factor" value="-1"></td> -->
+          <td>TODO</td>
         </tr>
         <tr>
           <td>
@@ -124,7 +171,10 @@
           <td><select id="input_measure_trait"></select></td>
         </tr>
         <tr>
-          <td>Batch Size</td>
+          <td>
+            Batch Size
+            <span class="tooltip">How many genealogies to generate and analyze in aggregate for a batch.</span>
+          </td>
           <td><input type="number" id="input_batch_size"></td>
         </tr>
         <!-- <tr>
@@ -134,16 +184,47 @@
       </table>
       <br>
       <button type="button" id="button_simulate_batch" onclick="simulate_batch()">simulate batch</button>
+      <div id="status_simulate_batch" class="hidden">
+        simulating...
+      </div>
+      <div id="output_simulate_batch"></div>
     </div>
     <!--  -->
-    <div id="gpe_graph_container">
-      <!-- <h2>GPE Results Graphs</h2> -->
+    <div id="gpe_results_graph_container">
+      <div>
+        <div class="gpe_results_graph" id="gpe_results_graph_Xbar_ancestors"></div>
+        <div class="gpe_results_graph" id="gpe_results_graph_fitted_Xbar_ancestors"></div>
+      </div>
+      <div>
+        <div class="gpe_results_graph" id="gpe_results_graph_Xbar_descendants"></div>
+        <div class="gpe_results_graph" id="gpe_results_graph_fitted_Xbar_descendants"></div>
+      </div>
+      <div>
+        <div class="gpe_results_graph" id="gpe_results_graph_DXbar"></div>
+        <div class="gpe_results_graph" id="gpe_results_graph_fitted_DXbar"></div>
+      </div>
+      <div>
+        <div class="gpe_results_graph" id="gpe_results_graph_cov_Ctil_X_ancestors"></div>
+        <div class="gpe_results_graph" id="gpe_results_graph_fitted_cov_Ctil_X_ancestors"></div>
+      </div>
+      <div>
+        <div class="gpe_results_graph" id="gpe_results_graph_ave_DX"></div>
+        <div class="gpe_results_graph" id="gpe_results_graph_fitted_ave_DX"></div>
+      </div>
+      <div>
+        <div class="gpe_results_graph" id="gpe_results_graph_cov_Ctil_X_descendants"></div>
+        <div class="gpe_results_graph" id="gpe_results_graph_fitted_cov_Ctil_X_descendants"></div>
+      </div>
+    </div>
+    <!--  -->
+    <!-- OLD  -->
+    <!-- <div id="gpe_graph_container">
       <div>
         <div id="gpe_graph_general_fixed" style="display: inline-block"></div>
         <div id="gpe_graph_general_fitted" style="display: inline-block"></div>
       </div>
       <div id="gpe_graph_trait_proportion"></div>
-    </div>
+    </div> -->
   </body>
   <head>
     <meta charset="utf-8">
