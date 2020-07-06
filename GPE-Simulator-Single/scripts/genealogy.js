@@ -1,5 +1,7 @@
 // TODO: make these more modular
 
+const trait_count = 2;
+
 function represent_trait(trait) {
   let representation = { string: "" };
 
@@ -22,10 +24,10 @@ function represent_trait(trait) {
   return representation;
 }
 
-function index_to_trait(i, n) {
+function index_to_trait(i) {
   trait = [];
   while (i > 0) { trait.push(i % 2); i = Math.floor(i / 2); }
-  while (trait.length < Math.log2(n)) { trait.push(0); }
+  while (trait.length < trait_count) { trait.push(0); }
   return trait.reverse();
 }
 
@@ -52,7 +54,6 @@ function create_simple_genealogy(
   progress=null)
 {
   let graph = new Graph();
-  let trait_count = initial_distribution.length;
   let ancestor_ids = [];
 
   //
@@ -78,7 +79,7 @@ function create_simple_genealogy(
   //
 
   initial_distribution.forEach((member_count, index) => {
-    let trait = index_to_trait(index, trait_count);
+    let trait = index_to_trait(index);
     for (var i = 0; i < member_count; i++) {
       let node_id = graph.add_node({
         trait: trait,
@@ -150,13 +151,22 @@ function create_simple_genealogy(
   }
 
   function polysex(parent_ids) {
-    let weighted_traits = new DefaultDictionary(() => 0);
-    parent_ids.forEach((parent_id) => {
-      let parent_trait = graph.get_node_metadata(parent_id).trait
-      let parent_trait_index = trait_to_index(parent_trait);
-      weighted_traits.modify(parent_trait_index, (x) => x + 1/parent_ids.length);
-    });
-    return index_to_trait(select_weighted(weighted_traits.items), trait_count);
+    let child_trait = [];
+    for (var i = 0; i < trait_count; i++) {
+      let weights = [0, 0];
+      parent_ids.forEach(parent_id => {
+        let parent_trait = graph.get_node_metadata(parent_id).trait[i];
+        weights[parent_trait]++;
+      });
+      let weights_total = weights[0] + weights[1];
+      weights = weights.map(w => w/weights_total);
+      if (Math.random() < weights[0])
+      { child_trait.push(0); }
+      else
+      { child_trait.push(1); }
+    }
+    console.log("child trait", child_trait);
+    return child_trait;
   }
 
   function fill_genealogy() {
@@ -179,7 +189,8 @@ function create_simple_genealogy(
               parents_count,
               replacement=false)
             .map((parent_id) => parseInt(parent_id));
-          // parents generates trait for child
+          // parents generates trait for child,
+          // each component chosen from a random parent
           let child_trait = polysex(parent_ids);
           graph.get_node_metadata(child_id).trait = child_trait;
           graph.get_node_metadata(child_id).fill = represent_trait(child_trait).color;

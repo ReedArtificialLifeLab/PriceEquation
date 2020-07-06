@@ -106,11 +106,15 @@ function load_genealogy_config() {
     case "1b":
       genealogy_config.initial_distribution = [
         parseInt(genealogy_config_inputs.initial_distribution_trait0.value),
-        parseInt(genealogy_config_inputs.initial_distribution_trait0.value)
+        0,
+        parseInt(genealogy_config_inputs.initial_distribution_trait0.value),
+        0
       ];
       let fitnesses_1b = [
         parseInt(genealogy_config_inputs.fitness_trait0.value),
-        parseInt(genealogy_config_inputs.fitness_trait1.value)
+        0,
+        parseInt(genealogy_config_inputs.fitness_trait1.value),
+        0
       ];
       genealogy_config.fitness = (trait) => fitnesses_1b[trait_to_index(trait)];
       break;
