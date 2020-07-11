@@ -3,7 +3,7 @@
 const trait_count = 2;
 
 function represent_trait(trait) {
-  let representation = { string: "" };
+  let representation = { aspect_string: [] };
 
   function add_aspect(aspect, aspect_options) {
     let key = aspect_options[0];
@@ -11,7 +11,7 @@ function represent_trait(trait) {
     let value_1 = aspect_options[2];
     let value = aspect == "0" ? value_0 : value_1;
     representation[key] = value;
-    representation.string += value + " ";
+    representation.aspect_string.push(value);
   }
 
   let all_aspect_options = [
@@ -20,7 +20,7 @@ function represent_trait(trait) {
   ];
   for (var i = 0; i < 2; i++)
   { add_aspect(i < trait.length ? trait[i] : "0", all_aspect_options[i]); }
-  representation.string = representation.string.trim();
+  representation.string = representation.aspect_string.join(" ");
   return representation;
 }
 
@@ -41,6 +41,20 @@ function trait_to_index(trait) {
 function trait_equal(trait1, trait2) {
   return trait_to_index(trait1) == trait_to_index(trait2);
 }
+
+function traitset_to_string(traitset) {
+  switch (traitset.length) {
+    case 1:
+      let trait = traitset[0];
+      return represent_trait(trait).string;
+    case 2:
+      let i = traitset[0][0] == traitset[1][0] ? 0 : 1;
+      return represent_trait(traitset[0]).aspect_string[i];
+  }
+}
+
+function encode_traitset(traitset) { return JSON.stringify(traitset); }
+function decode_traitset(string) { return JSON.parse(string); }
 
 
 // initial_distribution : list where ith entry is number of members in first generation that have trait i

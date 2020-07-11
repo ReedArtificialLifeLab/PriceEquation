@@ -31,7 +31,7 @@ config_defaults = {
   generations: 10,
   allow_older_parents: false,
   //
-  measure_trait: null,
+  measure_traitset: null,
   //
   batch_size: 10
 };
@@ -62,22 +62,32 @@ function update_trait_mode() {
     { for (var i = 0; i < elements.length; i++) { hide(elements[i]); } }
   });
 
-  // update measure_trait options
+  // update measure_traitset options
   // clear old options
-  let measure_trait = config_inputs.measure_trait;
-  while (measure_trait.children.length > 0)
-  { measure_trait.removeChild(measure_trait.children[0]); }
+  let measure_traitset = config_inputs.measure_traitset;
+  while (measure_traitset.children.length > 0)
+  { measure_traitset.removeChild(measure_traitset.children[0]); }
+  let traitsets = null;
   // choose
   switch (config.trait_mode) {
-    case "1b" : traits = [[0, 0], [1, 0]];                 break;
-    case "2b" : traits = [[0, 0], [0, 1], [1, 0], [1, 1]]; break;
-    default   : traits = [[0, 0], [1, 0]];                 break;
+    case "1b":
+      traitsets = [[[0, 0], [0, 1]], [[1, 0], [1, 1]]];
+      break;
+    case "2b":
+      traitsets = [
+        [[0, 0], [0, 1]], [[0, 0], [1, 0]], [[1, 1], [1, 0]], [[1, 1], [0, 1]],
+        [[0, 0]], [[0, 1]], [[1, 0]], [[1, 1]]
+      ];
+      break;
+    default:
+      traitsets = [[[0, 0], [0, 1]], [[1, 0], [1, 1]]];
+      break;
   }
-  traits.forEach((trait, index) => {
+  traitsets.forEach(traitset => {
     let option = document.createElement("option");
-    option.value = trait_to_index(trait);
-    option.innerText = represent_trait(trait).string;
-    measure_trait.appendChild(option);
+    option.value = encode_traitset(traitset);
+    option.innerText = traitset_to_string(traitset);
+    measure_traitset.appendChild(option);
   });
 }
 
@@ -123,7 +133,7 @@ function load_config() {
 
   config.allow_older_parents = config_inputs.allow_older_parents.checked
 
-  config.measure_trait = index_to_trait(config_inputs.measure_trait.value, config.initial_distribution.length);
+  config.measure_traitset = decode_traitset(config_inputs.measure_traitset.value);
 
   config.precision = 100000;
 
@@ -179,7 +189,7 @@ function calculate_gpe_single_result(genealogy) {
   {
     let gpe_analysis = new GPE_Analysis(
       genealogy,
-      config.measure_trait,
+      config.measure_traitset,
       ancestor_level);
     add_gpe_generation_result(gpe_single_result, {
       "Xbar_ancestors": gpe_analysis.Xbar_ancestors(),
@@ -251,18 +261,4 @@ function simulate_batch() {
     gpe_export();
     alert("done generating batch");
   });
-
-  // for (var i = 0; i < config.batch_size; i++) {
-  //   let genealogy = create_simple_genealogy(
-  //     config.initial_distribution,
-  //     config.fitness,
-  //     config.parents_count,
-  //     config.generations_count,
-  //     allow_older_parents = config.allow_older_parents);
-  //   let gpe_single_result = calculate_gpe_single_result(genealogy);
-  //   add_gpe_single_result(gpe_single_result);
-  // }
-  // console.log("gpe_batch_results", gpe_batch_results);
-  // plot_gpe_batch_results(gpe_batch_results);
-
 }

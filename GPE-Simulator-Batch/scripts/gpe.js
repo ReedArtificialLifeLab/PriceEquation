@@ -1,9 +1,9 @@
 // calculate generalized price equation stats of a given genealogy's graph,
 // for a specific trait
 class GPE_Analysis {
-  constructor(genealogy, trait, ancestor_level) {
+  constructor(genealogy, traitset, ancestor_level, trait_alt) {
     this.genealogy = genealogy;
-    this.trait = trait;
+    this.traitset = traitset;
     this.ancestor_level = ancestor_level;
     this.descendant_level = ancestor_level + 1;
   }
@@ -59,23 +59,26 @@ class GPE_Analysis {
     return total;
   }
 
+  test_trait(node_id) {
+
+  }
+
   // tests whether node has this.trait
   X(node_id) {
-    if (trait_equal(this.genealogy.get_node_metadata(node_id).trait, this.trait))
-    { return 1; }
-    else
-    { return 0; }
+    for (var i = 0; i < this.traitset.length; i++) {
+      let trait = this.traitset[i];
+      if (trait_equal(this.genealogy.get_node_metadata(node_id).trait, trait))
+      { return 1; }
+    }
+    return 0;
   }
 
   // Xbar of given level
   // i.e. average X of nodes in given level
   Xbar(level) {
-    let total = 0;
     let node_ids = this.genealogy.get_level_node_ids(level);
-    node_ids.forEach((node_id) => {
-      if (trait_equal(this.genealogy.get_node_metadata(node_id).trait, this.trait))
-      { total += 1; }
-    });
+    let total = 0;
+    node_ids.forEach(node_id => total += this.X(node_id));
     return total/node_ids.length;
   }
 
