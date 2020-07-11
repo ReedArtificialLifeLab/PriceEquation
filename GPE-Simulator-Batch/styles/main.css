@@ -80,20 +80,18 @@ input[type="number"] {
   max-height: 500px;
 }
 
-#button_simulate_batch {
-  display: block;
-  margin: auto;
-  margin-top: 0px;
-  margin-bottom: 0;
-  background: black;
-  color: white;
-  border: none;
+button, #a_gpe_export {
+  display: inline-block;;
+  margin-left: 20px;
   padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: block;
+  border: 1px solid black;
+
   font-size: 10pt;
   font-family: menlo;
+  text-decoration: none;
+  text-align: center;
+  color: white;
+  background: black;
 }
 
 #status_simulate_batch {

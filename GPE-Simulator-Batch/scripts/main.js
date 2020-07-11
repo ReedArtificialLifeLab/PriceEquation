@@ -1,19 +1,4 @@
 //
-// global variables
-//
-
-// global variables
-
-var config_inputs = {};
-var config_defaults = {};
-var config = {};
-
-// each value is a 2D array, where
-// - first index is generation index
-// - second index is batch index
-var gpe_batch_results = {};
-
-//
 // genealogy config
 //
 
@@ -62,8 +47,6 @@ for (var id in config_defaults) {
   }
 }
 
-var trait_modes = ["1b", "2b"];
-var for_trait_modes = {};
 trait_modes.forEach((trait_mode) => {
   for_trait_modes[trait_mode] = document.getElementsByClassName("for_trait_mode_"+trait_mode);
 });
@@ -157,8 +140,6 @@ update_config_inputs();
 // gpe calculations
 //
 
-const gpe_result_keys = ["Xbar_ancestors", "Xbar_descendants", "DXbar", "cov_Ctil_X_ancestors", "ave_DX", "cov_Ctil_X_descendants"];
-
 function add_gpe_single_result(gpe_single_result) {
   gpe_result_keys.forEach(key => {
     let generations = gpe_batch_results[key];
@@ -212,20 +193,41 @@ function calculate_gpe_single_result(genealogy) {
   return gpe_single_result;
 }
 
-
 //
-// graph
+// export
 //
 
+function gpe_export() {
+  let d = new Date();
+  let t = d.getTime();
 
-var progress_batch = {
-  container: document.getElementById("progress_container_batch"),
-  bar: document.getElementById("progress_bar_batch")
+  let name = "gpe_batch_results_"+t.toString();
+  let filename = name+".json";
+
+  let content = JSON.stringify({
+    config: config,
+    gpe_results: {
+      keys: gpe_result_keys,
+      values: gpe_result_values,
+      errors: gpe_result_errors
+    }
+  });
+
+  a_gpe_export.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(content));
+  a_gpe_export.setAttribute("download", filename);
 }
+
+
+//
+// run
+//
+
 
 function simulate_batch() {
   load_config();
   reset_gpe_batch_results();
+
+  // simulations
 
   let promise_batch = [];
   for (var i = 0; i < config.batch_size; i++) {
@@ -242,29 +244,25 @@ function simulate_batch() {
     }));
   }
 
+  // graphs
+
   Promise.all(promise_batch).then((_) => {
     plot_gpe_batch_results(gpe_batch_results);
-
-    set_hidden("button_simulate_batch", false);
-    set_hidden("status_simulate_batch", true);
+    gpe_export();
+    alert("done generating batch");
   });
 
-  plot_gpe_batch_results(gpe_batch_results);
+  // for (var i = 0; i < config.batch_size; i++) {
+  //   let genealogy = create_simple_genealogy(
+  //     config.initial_distribution,
+  //     config.fitness,
+  //     config.parents_count,
+  //     config.generations_count,
+  //     allow_older_parents = config.allow_older_parents);
+  //   let gpe_single_result = calculate_gpe_single_result(genealogy);
+  //   add_gpe_single_result(gpe_single_result);
+  // }
+  // console.log("gpe_batch_results", gpe_batch_results);
+  // plot_gpe_batch_results(gpe_batch_results);
 
-  for (var i = 0; i < config.batch_size; i++) {
-    let genealogy = create_simple_genealogy(
-      config.initial_distribution,
-      config.fitness,
-      config.parents_count,
-      config.generations_count,
-      allow_older_parents = config.allow_older_parents);
-    let gpe_single_result = calculate_gpe_single_result(genealogy);
-    add_gpe_single_result(gpe_single_result);
-  }
-  console.log("gpe_batch_results", gpe_batch_results);
-  plot_gpe_batch_results(gpe_batch_results);
-
-  set_hidden("button_simulate_batch", true);
-  set_hidden("status_simulate_batch", false);
-  alert("done generating batch");
 }
