@@ -11,12 +11,12 @@ function add_config_input(id) {
 config_defaults = {
   trait_mode: "1b",
   //
-  initial_distribution_trait0: 2,
-  initial_distribution_trait1: 2,
-  initial_distribution_trait00: 2,
-  initial_distribution_trait01: 2,
-  initial_distribution_trait10: 2,
-  initial_distribution_trait11: 2,
+  initial_distribution_trait0: 10,
+  initial_distribution_trait1: 10,
+  initial_distribution_trait00: 5,
+  initial_distribution_trait01: 5,
+  initial_distribution_trait10: 5,
+  initial_distribution_trait11: 5,
   //
   fitness_trait0: 1,
   fitness_trait1: 1,
@@ -26,7 +26,7 @@ config_defaults = {
   fitness_trait11: 1,
   //
   gerophilia: -1,
-  mutation: -1,
+  mutation: 0.0,
   parentality: 2,
   generations: 10,
   allow_older_parents: false,
@@ -126,6 +126,10 @@ function load_config() {
       config.fitness = (trait) => fitnesses_2b[trait_to_index(trait)];
       break;
   }
+
+  config.mutation = parseFloat(config_inputs.mutation.value);
+
+  // TODO: config.gerophilia = ...
 
   config.parents_count = parseInt(config_inputs.parentality.value);
 
@@ -242,12 +246,7 @@ function simulate_batch() {
   let promise_batch = [];
   for (var i = 0; i < config.batch_size; i++) {
     promise_batch.push(new Promise(function(resolve, reject) {
-      let genealogy = create_simple_genealogy(
-        config.initial_distribution,
-        config.fitness,
-        config.parents_count,
-        config.generations_count,
-        allow_older_parents = config.allow_older_parents);
+      let genealogy = create_simple_genealogy(config);
       let gpe_single_result = calculate_gpe_single_result(genealogy);
       add_gpe_single_result(gpe_single_result);
       resolve(null)

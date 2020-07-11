@@ -61,10 +61,16 @@ function decode_traitset(string) { return JSON.parse(string); }
 // fitness : traits -> fitness score
 // parents_count : number of parents each node has
 // generations_count : number of generations_count
-function create_simple_genealogy(
-  initial_distribution, fitness, parents_count, generations_count,
-  allow_older_parents=false)
-{
+function create_simple_genealogy(config) {
+  let trait_mode = config.trait_mode;
+  let initial_distribution = config.initial_distribution;
+  let fitness = config.fitness;
+  let mutation = config.mutation;
+  let parents_count = config.parents_count;
+  let generations_count = config.generations_count;
+  let allow_older_parents = config.allow_older_parents;
+
+
   let graph = new Graph();
   let ancestor_ids = [];
 
@@ -108,8 +114,8 @@ function create_simple_genealogy(
   }
 
   function select_weighted(weighted_data, max=1.0) {
-    r = max * Math.random();
-    cumulative = 0;
+    let r = max * Math.random();
+    let cumulative = 0;
     for (var key in weighted_data) {
       let weight = weighted_data[key];
       cumulative += weight;
@@ -122,16 +128,16 @@ function create_simple_genealogy(
   function selected_multiple_weighted(weighted_data, n, replacement=true) {
     let weighted_indices = {};
     let indices_to_data = {};
-    let index_count = 0;
+    let i = 0;
     for (var key in weighted_data) {
-      weighted_indices[index_count] = weighted_data[key];
-      indices_to_data[index_count] = key;
-      index_count++;
+      weighted_indices[i] = weighted_data[key];
+      indices_to_data[i] = key;
+      i++;
     }
 
-    max = 1.0;
-    selected_indices = [];
-    for (var i = 0; i < n; i++) {
+    let max = 1.0;
+    let selected_indices = [];
+    for (i = 0; i < n; i++) {
       let index = select_weighted(weighted_indices, max=max);
       selected_indices.push(index);
       if (!replacement) {
@@ -153,10 +159,20 @@ function create_simple_genealogy(
       });
       let weights_total = weights[0] + weights[1];
       weights = weights.map(w => w/weights_total);
-      if (Math.random() < weights[0])
-      { child_trait.push(0); }
-      else
-      { child_trait.push(1); }
+      // false => 0 | true => 1
+      let aspect = Math.random() < weights[1];
+      // mutation,
+      // which only operates on appropriate trait for trait_mode
+      switch (trait_mode) {
+        case "1b":
+          if (i <= 0 && Math.random() < mutation) { aspect = !aspect; }
+          break;
+        case "2b":
+          if (i <= 1 && Math.random() < mutation) { aspect = !aspect; }
+          break;
+      }
+      aspect = aspect ? 1 : 0;
+      child_trait.push(aspect);
     }
     return child_trait;
   }
@@ -182,9 +198,10 @@ function create_simple_genealogy(
         // parents generates trait for child,
         // each component chosen from a random parent
         let child_trait = polysex(parent_ids);
-        graph.get_node_metadata(child_id).trait = child_trait;
-        graph.get_node_metadata(child_id).fill = represent_trait(child_trait).color;
-        graph.get_node_metadata(child_id).shape = represent_trait(child_trait).shape;
+        let child_metadata = graph.get_node_metadata(child_id);
+        child_metadata.trait = child_trait;
+        child_metadata.fill =  represent_trait(child_trait).color;
+        child_metadata.shape = represent_trait(child_trait).shape;
 
         // link parents to child
         parent_ids.forEach((parent_id) => {
@@ -193,13 +210,12 @@ function create_simple_genealogy(
         });
       }
 
-      if (allow_older_parents) {
-        // choose from all ancestors
-        ancestor_ids = ancestor_ids.concat(child_ids);
-      } else {
-        // choose only from immediately previous generation
-        ancestor_ids = child_ids;
-      }
+      // choose from all ancestors
+      if (allow_older_parents)
+      { ancestor_ids = ancestor_ids.concat(child_ids); }
+      // choose only from immediately previous generation
+      else
+      { ancestor_ids = child_ids; }
     }
 
     for (var i = 1; i < generations_count; i++) { fill_generation(i) }

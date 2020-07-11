@@ -28,10 +28,9 @@ class GPE_Analysis {
 
   // Connections from single ancestor to all descendants
   C_ancestor(ancestor_id) {
-    let descendant_level = this.genealogy.get_level(ancestor_id) + 1;
     let total = 0;
     this.genealogy.get_edges_from(ancestor_id).forEach((edge) => {
-      if (this.genealogy.get_level(edge.target) == descendant_level)
+      if (this.genealogy.get_level(edge.target) == this.descendant_level)
       { total += 1; }
     });
     return total;

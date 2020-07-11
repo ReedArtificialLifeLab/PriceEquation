@@ -111,8 +111,6 @@ class Graph {
   }
 
   get_node_metadata(node_id) {
-    // let node = this.get_node(node_id);
-    // if (node == undefined) { console.log(node_id); }
     return this.get_node(node_id).metadata;
   }
 
@@ -200,8 +198,9 @@ class Graph {
   set_level(node_id, level) {
     let level_length = this.levels.get(level).length;
     this.levels.append_at(level, node_id);
-    this.get_node_metadata(node_id).level = level;
-    this.get_node_metadata(node_id).row = level_length;
+    let metadata = this.get_node_metadata(node_id);
+    metadata.level = level;
+    metadata.row = level_length;
   }
 
   get_level(node_id) {
