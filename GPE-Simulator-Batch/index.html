@@ -100,39 +100,21 @@
         </tr>
         <tr>
           <td>
-            Parentalities
-            <span class="tooltip">The relative parentalities of each trait.</span>
+            Gerophilia
+            <span class="tooltip">
+              modifies the percieved fitness of an ancestor as a factor of how many generations previous it is to the currect generation.
+            </span>
           </td>
-          <td>TODO</td>
-          <!-- <td>
-            <table class="for_trait_mode_1b">
-              <tr>
-                <th>Red</th>
-                <td><input type="number" id="input_parentality_trait0" value="1"></td>
-              </tr>
-              <tr>
-                <th>Blue</th>
-                <td><input type="number" id="input_parentality_trait1" value="1"></td>
-              </tr>
-            </table>
-            <table class="for_trait_mode_2b">
-              <tr>
-                <td style="border: none"></td>
-                <th>Circle</th>
-                <th>Triangle</th>
-              </tr>
-              <tr>
-                <th>Red</th>
-                <td><input type="number" id="input_parentality_trait00" value="1"></td>
-                <td><input type="number" id="input_parentality_trait01" value="1"></td>
-              </tr>
-              <tr>
-                <th>Blue</th>
-                <td><input type="number" id="input_parentality_trait10" value="1"></td>
-                <td><input type="number" id="input_parentality_trait11" value="1"></td>
-              </tr>
-            </table>
-          </td> -->
+          <td><input type="number" id="input_gerophilia" value="-1"></td>
+        </tr>
+        <tr>
+          <td>
+            Mutation
+            <span class="tooltip">
+              the chance that a trait component will be flipped upon inheritance.
+            </span>
+          </td>
+          <td><input type="number" id="input_mutation" value="-1"></td>
         </tr>
         <tr>
           <td>
@@ -154,14 +136,6 @@
             <span class="tooltip"><b>True:</b> members choose parents from the entire ancestry.<br><b>False:</b> members choose parents only from the immediately previous generation.</span>
           </td>
           <td><input type="checkbox" id="input_allow_older_parents"></td>
-        </tr>
-        <tr>
-          <td>
-            Age Factor
-            <span class="tooltip">modifies the percieved fitness of an ancestor as a factor of how many generations previous it is to the currect generation.</span>
-          </td>
-          <!-- <td><input type="number" id="input_age_factor" value="-1"></td> -->
-          <td>TODO</td>
         </tr>
         <tr>
           <td>
@@ -191,6 +165,9 @@
     </div>
     <!--  -->
     <div id="gpe_results_graph_container">
+      <div>
+        <div class="gpe_results_graph" id="gpe_results_graph_summary"></div>
+      </div>
       <div>
         <div class="gpe_results_graph" id="gpe_results_graph_Xbar_ancestors"></div>
         <div class="gpe_results_graph" id="gpe_results_graph_fitted_Xbar_ancestors"></div>

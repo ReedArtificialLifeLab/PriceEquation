@@ -40,6 +40,8 @@ config_defaults = {
   fitness_trait10: 1,
   fitness_trait11: 1,
   //
+  gerophilia: -1,
+  mutation: -1,
   parentality: 2,
   generations: 10,
   allow_older_parents: false,
