@@ -28,10 +28,10 @@ config_defaults = {
   //
   initial_distribution_trait0: 2,
   initial_distribution_trait1: 2,
-  initial_distribution_trait00: 1,
-  initial_distribution_trait01: 1,
-  initial_distribution_trait10: 1,
-  initial_distribution_trait11: 1,
+  initial_distribution_trait00: 2,
+  initial_distribution_trait01: 2,
+  initial_distribution_trait10: 2,
+  initial_distribution_trait11: 2,
   //
   fitness_trait0: 1,
   fitness_trait1: 1,
@@ -41,7 +41,7 @@ config_defaults = {
   fitness_trait11: 1,
   //
   parentality: 2,
-  generations: 5,
+  generations: 10,
   allow_older_parents: false,
   //
   measure_trait: null,
@@ -289,7 +289,7 @@ function simulate_batch() {
   }
 
   Promise.all(promise_batch).then((_) => {
-    console.log("gpe_batch_results", gpe_batch_results);
+    // console.log("gpe_batch_results", gpe_batch_results);
     plot_gpe_batch_results(gpe_batch_results);
 
     set_hidden("button_simulate_batch", false);

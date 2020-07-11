@@ -188,7 +188,7 @@ function create_simple_genealogy(
       }
     }
 
-    for (var i = 0; i < generations_count; i++) { fill_generation(i) }
+    for (var i = 1; i < generations_count; i++) { fill_generation(i) }
   }
 
   fill_genealogy();
