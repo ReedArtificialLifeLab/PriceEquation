@@ -36,6 +36,15 @@ function plot_gpe_batch_results(gpe_batch_results) {
     // "cov_Ctil_X_descendants"
   ];
 
+  let gpe_result_names = {
+    "Xbar_ancestors": "Xbar_a",
+    "Xbar_descendants": "Xbar_d",
+    "DXbar": "DXbar",
+    "cov_Ctil_X_ancestors": "cov(Ctil_a, X_a)",
+    "ave_DX": "ave(DX)",
+    "cov_Ctil_X_descendants": "cov(Ctil_d, X_d)"
+  }
+
   let y_ranges = {
     "Xbar_ancestors": [0, 1],
     "Xbar_descendants": [0, 1],
@@ -44,6 +53,9 @@ function plot_gpe_batch_results(gpe_batch_results) {
     "ave_DX": [-1, 1],
     "cov_Ctil_X_descendants": [-1, 1]
   }
+
+  let gpe_result_ys = {};
+  gpe_result_keys.forEach((result_key) => { gpe_result_ys[result_key] = []; });
 
   // for reference:
   // gpe_batch_results[result_key][gen_i][batch_i]
@@ -62,6 +74,8 @@ function plot_gpe_batch_results(gpe_batch_results) {
       ys.push(y_mean);
       ys_error.push(y_std);
     }
+
+    gpe_result_ys[result_key] = ys;
 
     let data = [
       {
@@ -125,5 +139,57 @@ function plot_gpe_batch_results(gpe_batch_results) {
     Plotly.newPlot("gpe_results_graph_fitted_"+result_key, data, layout_fitted, {displayModeBar: false});
   }
 
+  function plot_gpe_batch_results_summary() {
+    let ys = gpe_result_ys;
+
+    let xs = [];
+    for (var gen_i = 0; gen_i < config.generations_count - 1; gen_i++) {
+      xs.push(gen_i);
+    }
+
+    let traces = {};
+    gpe_result_keys.forEach(result_key => {
+      traces[result_key] = {
+        name: gpe_result_names[result_key],
+        x: xs,
+        y: ys[result_key],
+        type: "scatter"
+      };
+    });
+
+    let data = [];
+    gpe_result_keys.forEach(result_key => { data.push(traces[result_key]); });
+
+    let layout = {
+      title: "PGE Results Summary",
+      width: gpe_graph_layout.width*2,
+      height: gpe_graph_layout.height*1.5,
+      xaxis: {
+        title: "ancestor generation",
+        autotick: false,
+        tick0: 0,
+        dtick: 1
+      },
+      yaxis: {
+        range: [-1, 1],
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        gridcolor: '#bdbdbd',
+        gridwidth: 2,
+        zerolinecolor: '#969696',
+        zerolinewidth: 4
+      },
+      showlegend: true
+    };
+
+    Plotly.newPlot("gpe_results_graph_summary", data, layout, {displayModeBar: false});
+  }
+
+  //
+
+  // individual results
   gpe_result_keys.forEach(result_key => plot_gpe_batch_result(result_key));
+  // summary of results
+  plot_gpe_batch_results_summary();
 }

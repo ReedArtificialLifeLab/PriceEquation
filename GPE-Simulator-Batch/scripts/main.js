@@ -291,7 +291,6 @@ function simulate_batch() {
   }
 
   Promise.all(promise_batch).then((_) => {
-    // console.log("gpe_batch_results", gpe_batch_results);
     plot_gpe_batch_results(gpe_batch_results);
 
     set_hidden("button_simulate_batch", false);
@@ -315,28 +314,5 @@ function simulate_batch() {
 
   set_hidden("button_simulate_batch", true);
   set_hidden("status_simulate_batch", false);
+  alert("done generating batch");
 }
-
-
-//
-// run
-//
-
-// function when_available(name, callback) {
-//   let interval = 10; // ms
-//   let interval_id = setInterval(() => {
-//     if (window[name] !== undefined) {
-//       clearInterval(interval_id);
-//       callback();
-//     }
-//   }, interval);
-// }
-//
-// when_available("Plotly", () => simulate_batch());
-
-// window.addEventListener("keypress", (e) => {
-//   if (e.key === " ") {
-//     e.preventDefault();
-//     generate_genealogy();
-//   }
-// });
