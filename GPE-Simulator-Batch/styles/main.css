@@ -105,7 +105,7 @@ button, #a_gpe_export {
 #status_simulate_batch {
   display: block;
   margin: auto;
-  margin-top: 0px;
+  margin-top: 0;
   margin-bottom: 0;
   background: black;
   color: white;
@@ -116,6 +116,18 @@ button, #a_gpe_export {
   display: block;
   font-size: 10pt;
   font-family: menlo;
+}
+
+#simulate_batch_status {
+  display: inline-block;
+  padding-bottom: 0px;
+  padding-top: 0px;
+  vertical-align: middle;
+}
+
+#simulate_batch_status_image {
+  width: 30px;
+  height: 30px;
 }
 
 .output {

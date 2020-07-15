@@ -238,33 +238,68 @@ function gpe_export() {
 
 
 function simulate_batch() {
-  load_config();
-  reset_gpe_batch_results();
+  // define promises
 
-  // simulations
+  let do_init = new Promise(function(resolve, reject) {
+    // unhide(div_simulate_batch_status);
+    load_config();
+    reset_gpe_batch_results();
+    resolve(null);
+  });
 
-  let promise_batch = [];
-  for (var i = 0; i < config.batch_size; i++) {
-    promise_batch.push(new Promise(function(resolve, reject) {
+  /* TODO: still doessn't work...
+  // asynchronously updates progress bar
+  // let loop_inverval_id = null;
+  let batch_i = 0;
+  function update_progress_loop() {
+    span_progress_text.innerText = batch_i;
+    // if (batch_i >= config.batch_size) { window.clearInterval(loop_inverval_id); }
+    if (batch_i < config.batch_size) { window.setTimeout(() => update_progress_loop(), 10); }
+  }
+  update_progress_loop();
+  // loop_inverval_id = window.setInterval(update_progress_loop, 50);
+  */
+
+
+  let simulate_batch_promises = [];
+  for (batch_i = 0; batch_i < config.batch_size; batch_i++) {
+    simulate_batch_promises.push(new Promise(function(resolve, reject) {
       let genealogy = create_simple_genealogy(config);
       let gpe_single_result = calculate_gpe_single_result(genealogy);
       add_gpe_single_result(gpe_single_result);
-      resolve(null)
+      resolve(null);
     }));
   }
+  let do_simulation_batches = Promise.all(simulate_batch_promises);
+
+  let do_graph_results = new Promise(function(resolve, reject) {
+    plot_gpe_batch_results(gpe_batch_results);
+    gpe_export();
+    // hide(div_simulate_batch_status);
+    resolve(null);
+  });
+
+  // sequence promises
+
+  do_init.then(do_simulation_batches).then(do_graph_results);
 
   // graphs
 
-  Promise.all(promise_batch).then((_) => {
-    plot_gpe_batch_results(gpe_batch_results);
-    gpe_export();
-    // alert("done generating batch");
-  });
+  // Promise.all(simulate_batch_promises).then(_ => {
+  //   plot_gpe_batch_results(gpe_batch_results);
+  //   gpe_export();
+  //
+  //   hide(div_simulate_batch_status);
+  //   // let x = document.createElement("div")
+  //   // x.innerText = "done generating batch";
+  //   // document.body.appendChild(x);
+  //   // alert("done generating batch");
+  // });
 }
 
-document.addEventListener("keypress", (e) => {
-  if (e.key === " ") {
-    e.preventDefault();
-    simulate_batch();
-  }
-});
+// document.addEventListener("keypress", (e) => {
+//   if (e.key === " ") {
+//     e.preventDefault();
+//     simulate_batch();
+//   }
+// });

@@ -33,3 +33,10 @@ var for_trait_modes = {};
 var a_gpe_export = document.getElementById("a_gpe_export");
 
 var div_gpe_results_graph_container = document.getElementById("gpe_results_graph_container");
+
+var button_simulate_batch = document.getElementById("button_simulate_batch");
+
+var div_simulate_batch_status = document.getElementById("simulate_batch_status");
+// var image_simulate_batch_status = document.getElementById("simulate_batch_status_image");
+
+var span_progress_text = document.getElementById("progress_text");
