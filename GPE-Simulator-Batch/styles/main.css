@@ -1,9 +1,13 @@
 html, body {
   margin: 0;
   padding: 0;
-  padding: 10px;
+  padding: 2px;
 
   font_family: menlo;
+}
+
+body {
+  width: 1200px;
 }
 
 #config_container {
@@ -26,18 +30,22 @@ html, body {
   vertical-align: top;
 }
 
-#gpe_results_graph_container {
+#gpe_results_container {
   display: inline-block;
   vertical-align: top;
+  align-items: center;
 }
 
-#gpe_results_graph_container > div {
-  display: block;
+#gpe_results_graph_container {
+
+}
+
+#gpe_results_graph_container > select {
+
 }
 
 .gpe_results_graph {
-  vertical-align: top;
-  display: inline-block;
+
 }
 
 h2 {
@@ -72,7 +80,7 @@ input {
 }
 
 input[type="number"] {
-  width: 50px;
+  width: 40px;
 }
 
 #gpe_table_container {

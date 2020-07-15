@@ -91,9 +91,6 @@ function create_simple_genealogy(config) {
     }
   });
 
-  // console.log("# new genealogy");
-  // console.log(graph.get_level_node_ids(0).map(id => represent_trait(graph.get_node_metadata(id).trait).string));
-
   //
   // evolution functions
   //
@@ -212,8 +209,6 @@ function create_simple_genealogy(config) {
           graph.add_edge(parent_id, child_id, { stroke: parent_color })
         });
       }
-
-      // console.log(child_ids.map(id => represent_trait(graph.get_node_metadata(id).trait).string));
 
       // choose from all ancestors
       if (allow_older_parents)

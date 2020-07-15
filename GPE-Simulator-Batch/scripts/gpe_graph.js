@@ -1,6 +1,11 @@
 const gpe_graph_layout = {
-  width: 400,
-  height: 400
+  width: 800,
+  height: 600
+}
+
+const gpe_graph_margin = {
+  l:50, r:50, b:50, t:50,
+  pad: 0
 }
 
 const gpe_result_names = {
@@ -103,6 +108,7 @@ function plot_gpe_batch_results(gpe_batch_results) {
         zerolinecolor: '#969696',
         zerolinewidth: 4
       },
+      margin: gpe_graph_margin,
       showlegend: false
     };
 
@@ -125,11 +131,12 @@ function plot_gpe_batch_results(gpe_batch_results) {
         zerolinecolor: '#969696',
         zerolinewidth: 4
       },
+      margin: gpe_graph_margin,
       showlegend: false
     };
 
-    Plotly.newPlot("gpe_results_graph_"+result_key, data, layout, {displayModeBar: false});
-    Plotly.newPlot("gpe_results_graph_fitted_"+result_key, data, layout_fitted, {displayModeBar: false});
+    Plotly.newPlot("gpe_results_graph_"+result_key, data, layout);
+    Plotly.newPlot("gpe_results_graph_fitted_"+result_key, data, layout_fitted);
   }
 
   function plot_gpe_batch_results_summary() {
@@ -155,8 +162,8 @@ function plot_gpe_batch_results(gpe_batch_results) {
 
     let layout = {
       title: "PGE Results Summary",
-      width: gpe_graph_layout.width*2,
-      height: gpe_graph_layout.height*1.5,
+      width: gpe_graph_layout.width,
+      height: gpe_graph_layout.height,
       xaxis: {
         title: "ancestor generation",
         autotick: false,
@@ -173,10 +180,11 @@ function plot_gpe_batch_results(gpe_batch_results) {
         zerolinecolor: '#969696',
         zerolinewidth: 4
       },
+      margin: gpe_graph_margin,
       showlegend: true
     };
 
-    Plotly.newPlot("gpe_results_graph_summary", data, layout, {displayModeBar: false});
+    Plotly.newPlot("gpe_results_graph_summary", data, layout);
   }
 
   //
@@ -185,4 +193,20 @@ function plot_gpe_batch_results(gpe_batch_results) {
   gpe_result_keys.forEach(result_key => plot_gpe_batch_result(result_key));
   // summary of results
   plot_gpe_batch_results_summary();
+}
+
+//
+// UI
+//
+
+function set_displayed_gpe_results_graph(value) {
+  let target_id = "gpe_results_graph_"+value;
+  let children = div_gpe_results_graph_container.children;
+  for (var i = 0; i < children.length; i++) {
+    let child = children[i];
+    if (child.id == target_id)
+    { unhide(child); }
+    else
+    { hide(child); }
+  }
 }

@@ -165,7 +165,43 @@
       <a id="a_gpe_export" href="#">export json</a>
     </div>
     <!--  -->
-    <div id="gpe_results_graph_container">
+    <div id="gpe_results_container">
+      <span>
+        display graph:
+        <select id="select_results_graph" onchange="set_displayed_gpe_results_graph(event.target.value);">
+          <option value="summary">Summary</option>
+          <option value="Xbar_ancestors">Xbar_ancestors</option>
+          <option value="fitted_Xbar_ancestors">Xbar_ancestors (fitted)</option>
+          <option value="Xbar_descendants">Xbar_descendants</option>
+          <option value="fitted_Xbar_descendants">Xbar_descendants (fitted)</option>
+          <option value="DXbar">DXbar</option>
+          <option value="fitted_DXbar">DXbar (fitted)</option>
+          <option value="cov_Ctil_X_ancestors">cov_Ctil_X_ancestors</option>
+          <option value="fitted_cov_Ctil_X_ancestors">cov_Ctil_X_ancestors (fitted)</option>
+          <option value="ave_DX">ave_DX</option>
+          <option value="fitted_ave_DX">ave_DX (fitted)</option>
+          <option value="cov_Ctil_X_descendants">cov_Ctil_X_descendants</option>
+          <option value="fitted_cov_Ctil_X_descendants">cov_Ctil_X_descendants (fitted)</option>
+        </select>
+      </span>
+      <div id="gpe_results_graph_container">
+        <div class="gpe_results_graph" id="gpe_results_graph_summary"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_Xbar_ancestors"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_Xbar_ancestors"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_Xbar_descendants"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_Xbar_descendants"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_DXbar"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_DXbar"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_cov_Ctil_X_ancestors"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_cov_Ctil_X_ancestors"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_ave_DX"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_ave_DX"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_cov_Ctil_X_descendants"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_cov_Ctil_X_descendants"></div>
+      </div>
+    </div>
+    <!-- OLD -->
+    <!-- <div id="gpe_results_graph_container">
       <div>
         <div class="gpe_results_graph" id="gpe_results_graph_summary"></div>
       </div>
@@ -193,7 +229,7 @@
         <div class="gpe_results_graph" id="gpe_results_graph_cov_Ctil_X_descendants"></div>
         <div class="gpe_results_graph" id="gpe_results_graph_fitted_cov_Ctil_X_descendants"></div>
       </div>
-    </div>
+    </div> -->
   <!--  -->
   </body>
   <head>

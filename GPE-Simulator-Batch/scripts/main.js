@@ -9,18 +9,18 @@ function add_config_input(id) {
 }
 
 config_defaults = {
-  trait_mode: "2b",
+  trait_mode: "1b",
   //
   initial_distribution_trait0: 10,
   initial_distribution_trait1: 10,
-  initial_distribution_trait00: 0,
-  initial_distribution_trait01: 2,
-  initial_distribution_trait10: 2,
-  initial_distribution_trait11: 2,
+  initial_distribution_trait00: 5,
+  initial_distribution_trait01: 5,
+  initial_distribution_trait10: 5,
+  initial_distribution_trait11: 5,
   //
   fitness_trait0: 1,
   fitness_trait1: 1,
-  fitness_trait00: 100,
+  fitness_trait00: 1,
   fitness_trait01: 1,
   fitness_trait10: 1,
   fitness_trait11: 1,

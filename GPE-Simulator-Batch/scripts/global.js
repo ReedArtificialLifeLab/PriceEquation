@@ -31,3 +31,5 @@ var trait_modes = ["1b", "2b"];
 var for_trait_modes = {};
 
 var a_gpe_export = document.getElementById("a_gpe_export");
+
+var div_gpe_results_graph_container = document.getElementById("gpe_results_graph_container");
