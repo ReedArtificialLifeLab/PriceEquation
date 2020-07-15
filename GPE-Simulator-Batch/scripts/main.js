@@ -9,18 +9,18 @@ function add_config_input(id) {
 }
 
 config_defaults = {
-  trait_mode: "1b",
+  trait_mode: "2b",
   //
   initial_distribution_trait0: 10,
   initial_distribution_trait1: 10,
-  initial_distribution_trait00: 5,
-  initial_distribution_trait01: 5,
-  initial_distribution_trait10: 5,
-  initial_distribution_trait11: 5,
+  initial_distribution_trait00: 0,
+  initial_distribution_trait01: 2,
+  initial_distribution_trait10: 2,
+  initial_distribution_trait11: 2,
   //
   fitness_trait0: 1,
   fitness_trait1: 1,
-  fitness_trait00: 1,
+  fitness_trait00: 100,
   fitness_trait01: 1,
   fitness_trait10: 1,
   fitness_trait11: 1,
@@ -33,7 +33,7 @@ config_defaults = {
   //
   measure_traitset: null,
   //
-  batch_size: 10
+  batch_size: 1
 };
 
 for (var id in config_defaults) {
@@ -201,7 +201,7 @@ function calculate_gpe_single_result(genealogy) {
       "DXbar": gpe_analysis.DXbar_simple(),
       "cov_Ctil_X_ancestors": gpe_analysis.cov_Ctil_X_ancestors(),
       "ave_DX": gpe_analysis.ave_DX(),
-      "cov_Ctil_X_ancestors": gpe_analysis.cov_Ctil_X_descendants()
+      "cov_Ctil_X_descendants": gpe_analysis.cov_Ctil_X_descendants()
     });
   }
   return gpe_single_result;
@@ -258,6 +258,13 @@ function simulate_batch() {
   Promise.all(promise_batch).then((_) => {
     plot_gpe_batch_results(gpe_batch_results);
     gpe_export();
-    alert("done generating batch");
+    // alert("done generating batch");
   });
 }
+
+document.addEventListener("keypress", (e) => {
+  if (e.key === " ") {
+    e.preventDefault();
+    simulate_batch();
+  }
+});

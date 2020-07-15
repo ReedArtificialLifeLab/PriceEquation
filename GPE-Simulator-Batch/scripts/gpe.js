@@ -159,6 +159,9 @@ class GPE_Analysis {
       cov_Ctil_X_total += ((Ctil_dict[ancestor_id] - Ctil_average) *
                     (X_dict[ancestor_id] - X_average));
     });
+
+    console.log({total: cov_Ctil_X_total, len: ancestor_ids.length});
+
     return cov_Ctil_X_total/ancestor_ids.length;
   }
 
