@@ -33,7 +33,7 @@ config_defaults = {
   //
   measure_traitset: null,
   //
-  batch_size: 1
+  batch_size: 10
 };
 
 for (var id in config_defaults) {
