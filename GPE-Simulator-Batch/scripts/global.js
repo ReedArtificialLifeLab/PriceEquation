@@ -8,8 +8,8 @@ const gpe_result_keys = [
   "Xbar_descendants",
   "DXbar",
   "cov_Ctil_X_ancestors",
-  "ave_DX"
-  // "cov_Ctil_X_descendants"
+  "ave_DX",
+  "cov_Ctil_X_descendants"
 ];
 
 
