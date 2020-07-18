@@ -210,3 +210,12 @@ function set_displayed_gpe_results_graph(value) {
     { hide(child); }
   }
 }
+
+function update_show_gpe_results_graph(event) {
+  let id = event.target.id;
+  let value = event.target.checked;
+  let gpe_result_key = id.split("gpe_results_option_")[1];
+  let target_id = "gpe_results_graph_"+gpe_result_key;
+  console.log(target_id);
+  set_hidden(target_id, !value);
+}

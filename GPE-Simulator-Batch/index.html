@@ -168,6 +168,80 @@
     </div>
     <!--  -->
     <div id="gpe_results_container">
+      <div id="gpe_results_selection_container">
+        <span>display graph</span>
+        <div id="gpe_results_options_container">
+          <label>
+            <input id="gpe_results_option_summary" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            summary
+          </label>
+          <label>
+            <input id="gpe_results_option_Xbar_ancestors" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            Xbar_ancestors
+          </label>
+          <!-- <label>
+            <input id="gpe_results_option_fitted_Xbar_ancestors" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            Xbar_ancestors (fitted)
+          </label> -->
+          <label>
+            <input id="gpe_results_option_Xbar_descendants" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            Xbar_descendants
+          </label>
+          <!-- <label>
+            <input id="gpe_results_option_fitted_Xbar_descendants" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            Xbar_descendants (fitted)
+          </label> -->
+          <label>
+            <input id="gpe_results_option_DXbar" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            DXbar
+          </label>
+          <!-- <label>
+            <input id="gpe_results_option_fitted_DXbar" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            DXbar (fitted)
+          </label> -->
+          <label>
+            <input id="gpe_results_option_cov_Ctil_X_ancestors" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            cov_Ctil_X_ancestors
+          </label>
+          <!-- <label>
+            <input id="gpe_results_option_fitted_cov_Ctil_X_ancestors" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            cov_Ctil_X_ancestors (fitted)
+          </label> -->
+          <label>
+            <input id="gpe_results_option_ave_DX" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            ave_DX
+          </label>
+          <!-- <label>
+            <input id="gpe_results_option_fitted_ave_DX" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            ave_DX (fitted)
+          </label> -->
+          <label>
+            <input id="gpe_results_option_cov_Ctil_X_descendants" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            cov_Ctil_X_descendants
+          </label>
+          <!-- <label>
+            <input id="gpe_results_option_fitted_cov_Ctil_X_descendants" type="checkbox" onchange="update_show_gpe_results_graph(event)">
+            cov_Ctil_X_descendants (fitted)
+          </label> -->
+        </div>
+      </div>
+      <div id="gpe_results_graph_container">
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_summary"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_Xbar_ancestors"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_Xbar_ancestors"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_Xbar_descendants"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_Xbar_descendants"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_DXbar"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_DXbar"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_cov_Ctil_X_ancestors"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_cov_Ctil_X_ancestors"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_ave_DX"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_ave_DX"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_cov_Ctil_X_descendants"></div>
+        <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_cov_Ctil_X_descendants"></div>
+      </div>
+    </div>
+    <!-- <div id="gpe_results_container">
       <span>
         display graph:
         <select id="select_results_graph" onchange="set_displayed_gpe_results_graph(event.target.value);">
@@ -201,7 +275,9 @@
         <div class="gpe_results_graph hidden" id="gpe_results_graph_cov_Ctil_X_descendants"></div>
         <div class="gpe_results_graph hidden" id="gpe_results_graph_fitted_cov_Ctil_X_descendants"></div>
       </div>
-    </div>
+    </div> -->
+    <!--  -->
+    <!--  -->
     <!-- OLD -->
     <!-- <div id="gpe_results_graph_container">
       <div>
